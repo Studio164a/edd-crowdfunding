@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name:			Crowdfunding EDD
- * Plugin URI:			https://github.com/Studio164a/crowdfunding-edd/
+ * Plugin URI:			https://github.com/Studio164a/edd-crowdfunding/
  * Description:			Crowdfund with Easy Digital Downloads.
  * Author:				Studio 164a
  * Author URI:			http://164a.com
  * Version:     		2.0
- * Text Domain: 		cfedd
- * GitHub Plugin URI: 	https://github.com/Studio164a/crowdfunding-edd
+ * Text Domain: 		eddcf
+ * GitHub Plugin URI: 	https://github.com/Studio164a/edd-crowdfunding
  * GitHub Branch:    	master
  */
 
@@ -18,28 +18,28 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 // EDD Slug above all.
-define( 'EDD_SLUG', apply_filters( 'cfedd_edd_slug', 'campaigns' ) );
+define( 'EDD_SLUG', apply_filters( 'eddcf_edd_slug', 'campaigns' ) );
 
 /**
  * Main Crowd Funding Class
  *
  * @since 		2.0
  */
-final class Crowdfunding_EDD {
+final class EDD_Crowdfunding {
 
 	/**
-	 * @var 	Crowdfunding_EDD
+	 * @var 	EDD_Crowdfunding
 	 * @static
 	 */
 	public static $instance;
 
 	/**
-	 * Main Crowdfunding_EDD instance.
+	 * Main EDD_Crowdfunding instance.
 	 *
-	 * Ensures that only one instance of Crowdfunding_EDD exists in memory at any one
+	 * Ensures that only one instance of EDD_Crowdfunding exists in memory at any one
 	 * time. Also prevents needing to define globals all over the place.
 	 *
-	 * @return 	Crowdfunding_EDD	 
+	 * @return 	EDD_Crowdfunding	 
 	 * @since 	2.0
 	 */
 	public static function instance() {
@@ -73,19 +73,19 @@ final class Crowdfunding_EDD {
 	 */
 	private function setup_globals() {
 		$this->version    	= '2.0.0';
-		$this->version_db 	= get_option( 'cfedd_version' );
+		$this->version_db 	= get_option( 'eddcf_version' );
 		$this->db_version 	= '1';
 
 		$this->file         = __FILE__;
-		$this->basename     = apply_filters( 'cfedd_plugin_basenname', plugin_basename( $this->file ) );
-		$this->plugin_dir   = apply_filters( 'cfedd_plugin_dir_path', plugin_dir_path( $this->file ) );
-		$this->plugin_url   = apply_filters( 'cfedd_plugin_dir_url', plugin_dir_url( $this->file ) );
-		$this->template_url = apply_filters( 'cfedd_plugin_template_url', 'crowdfunding/' );
-		$this->includes_dir = apply_filters( 'cfedd_includes_dir', $this->plugin_dir . 'includes/' );
-		$this->includes_url = apply_filters( 'cfedd_includes_url', $this->plugin_url . 'includes/' );
-		$this->lang_dir     = apply_filters( 'cfedd_lang_dir', $this->plugin_dir . 'languages/' );
+		$this->basename     = apply_filters( 'eddcf_plugin_basenname', plugin_basename( $this->file ) );
+		$this->plugin_dir   = apply_filters( 'eddcf_plugin_dir_path', plugin_dir_path( $this->file ) );
+		$this->plugin_url   = apply_filters( 'eddcf_plugin_dir_url', plugin_dir_url( $this->file ) );
+		$this->template_url = apply_filters( 'eddcf_plugin_template_url', 'crowdfunding/' );
+		$this->includes_dir = apply_filters( 'eddcf_includes_dir', $this->plugin_dir . 'includes/' );
+		$this->includes_url = apply_filters( 'eddcf_includes_url', $this->plugin_url . 'includes/' );
+		$this->lang_dir     = apply_filters( 'eddcf_lang_dir', $this->plugin_dir . 'languages/' );
 
-		$this->domain       = 'cfedd';
+		$this->domain       = 'eddcf';
 	}
 
 	/**
@@ -111,12 +111,12 @@ final class Crowdfunding_EDD {
 		require_once( $this->includes_dir . 'permalinks.php' );
 		require_once( $this->includes_dir . 'checkout.php' );
 
-		do_action( 'cfedd_include_files' );
+		do_action( 'eddcf_include_files' );
 
 		if ( ! is_admin() )
 			return;
 
-		do_action( 'cfedd_include_admin_files' );
+		do_action( 'eddcf_include_admin_files' );
 	}
 
 	/**
@@ -144,7 +144,7 @@ final class Crowdfunding_EDD {
 		// Textdomain
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 
-		do_action( 'cfedd_setup_actions' );
+		do_action( 'eddcf_setup_actions' );
 	}
 
 	/**
@@ -157,7 +157,7 @@ final class Crowdfunding_EDD {
 	private function check_upgrade() {
 		if ( $this->version_db !== $this->version ) {		
 			require_once( $this->includes_dir . 'class-crowdfunding-upgrade.php' );
-			Crowdfunding_EDD_Upgrade::upgrade_from( $this->version_db );
+			EDD_Crowdfunding_Upgrade::upgrade_from( $this->version_db );
 		}
 	}
 
@@ -363,11 +363,11 @@ final class Crowdfunding_EDD {
  *
  * Example: <?php $crowdfunding = crowdfunding(); ?>
  *
- * @return 	Crowdfunding_EDD
+ * @return 	EDD_Crowdfunding
  * @since  	2.0
  */
 function crowdfunding() {
-	return Crowdfunding_EDD::instance();
+	return EDD_Crowdfunding::instance();
 }
 add_action( 'plugins_loaded', 'crowdfunding' );
 

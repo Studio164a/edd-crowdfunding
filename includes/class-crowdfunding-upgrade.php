@@ -2,9 +2,9 @@
 /**
  * This file contains the class in charge of handling version upgrades. 
  *
- * @class 		Crowdfunding_EDD_Upgrade
+ * @class 		EDD_Crowdfunding_Upgrade
  * @version		2.0
- * @package		Crowdfunding EDD/Classes/Crowdfunding_EDD_Upgrade
+ * @package		Crowdfunding EDD/Classes/EDD_Crowdfunding_Upgrade
  * @category	Class
  * @author 		Studio164a
  */
@@ -12,14 +12,14 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'Crowdfunding_EDD_Upgrade' ) ) : 
+if ( ! class_exists( 'EDD_Crowdfunding_Upgrade' ) ) : 
 
 /**
- * Charitable_EDD_Upgrade
+ * EDD_Crowdfunding_Upgrade
  *
  * @since 		2.0
  */
-class Crowdfunding_EDD_Upgrade {
+class EDD_Crowdfunding_Upgrade {
 
 	/**
 	 * Current database version. 
@@ -47,14 +47,14 @@ class Crowdfunding_EDD_Upgrade {
 	 * @var 	string
 	 * @access 	private
 	 */
-	private $upgrade_log_key = 'cfedd_upgrade_log';
+	private $upgrade_log_key = 'eddcf_upgrade_log';
 	
 	/**
 	 * Option key for plugin version.
 	 * @var 	string
 	 * @access 	private
 	 */
-	private $version_key = 'cfedd_version';
+	private $version_key = 'eddcf_version';
 
 	/**
 	 * Upgrade from the current version stored in the database to the live version. 
@@ -68,7 +68,7 @@ class Crowdfunding_EDD_Upgrade {
 	 */
 	public static function upgrade_from( $db_version, $edge_version ) {
 		if ( self::requires_upgrade( $db_version, $edge_version ) ) {
-			new Crowdfunding_EDD_Upgrade( $db_version, $edge_version );
+			new EDD_Crowdfunding_Upgrade( $db_version, $edge_version );
 		}
 	}
 
