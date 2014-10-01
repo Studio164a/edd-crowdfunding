@@ -1,14 +1,9 @@
-# Crowdfunding EDD #
+# EDD Crowdfunding #
 
-## Bugs ##
-If you find an issue, let us know [here](https://github.com/Studio164a/crowdfunding-edd/issues?state=open)!
+EDD Crowdfunding turns Easy Digital Downloads into a crowdfunding platform. 
 
-## Support ##
-This is a developer's portal for Crowdfunding EDD and should _not_ be used for support.
+With Easy Digital Downloads and EDD Crowdfunding installed, you will be able to create your own crowdfunding campaigns and take pledges or donations from your website visitors. 
 
-## Contributions ##
-There are various ways you can contribute:
+## Credits ##
 
-1. Raise an [Issue](https://github.com/Studio164a/crowdfunding-edd/issues?state=open) on GitHub
-2. Send us a Pull Request with your bug fixes and/or new features
-3. Translate Crowdfunding EDD into different languages
+EDD Crowdfunding is based on Crowdfunding by Astoundify, which was removed from the WordPress.org plugin repository in August 2014. You can find a fork of Crowdfunding by Astoundify at https://github.com/Studio164a/appthemer-crowdfunding/
