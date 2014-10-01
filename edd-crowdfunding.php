@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name:			Crowdfunding EDD
+ * Plugin Name:			EDD Crowdfunding
  * Plugin URI:			https://github.com/Studio164a/edd-crowdfunding/
  * Description:			Crowdfund with Easy Digital Downloads.
  * Author:				Studio 164a
  * Author URI:			http://164a.com
- * Version:     		2.0
+ * Version:     		1.0.0
  * Text Domain: 		eddcf
  * GitHub Plugin URI: 	https://github.com/Studio164a/edd-crowdfunding
  * GitHub Branch:    	master
@@ -14,24 +14,20 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-/** Check if Easy Digital Downloads is active */
-include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
-// EDD Slug above all.
-define( 'EDD_SLUG', apply_filters( 'eddcf_edd_slug', 'campaigns' ) );
-
+if ( ! class_exists( 'EDD_Crowdfunding' ) ) : 
 /**
  * Main Crowd Funding Class
  *
- * @since 		2.0
+ * @since 		1.0.0
  */
 final class EDD_Crowdfunding {
 
 	/**
 	 * @var 	EDD_Crowdfunding
 	 * @static
+	 * @access 	private
 	 */
-	public static $instance;
+	private static $instance;
 
 	/**
 	 * Main EDD_Crowdfunding instance.
@@ -40,9 +36,9 @@ final class EDD_Crowdfunding {
 	 * time. Also prevents needing to define globals all over the place.
 	 *
 	 * @return 	EDD_Crowdfunding	 
-	 * @since 	2.0
+	 * @since 	1.0.0
 	 */
-	public static function instance() {
+	public static function get_instance() {
 		if ( ! isset ( self::$instance ) ) {
 			self::$instance = new self;
 		}
@@ -55,12 +51,22 @@ final class EDD_Crowdfunding {
 	 *
 	 * @return 	void
 	 * @access 	private
-	 * @since 	2.0
+	 * @since 	1.0.0
 	 */
 	private function __construct() {
 		$this->setup_globals();
-		$this->includes();
-		$this->setup_actions();
+		
+		$this->load_dependencies();
+
+		$this->maybe_upgrade();
+		
+		$this->attach_hooks_and_filters();
+
+		$this->maybe_load_admin();
+
+		$this->maybe_load_public();
+
+		do_action('eddcf_start', $this);
 	}
 
 	/**
@@ -69,21 +75,22 @@ final class EDD_Crowdfunding {
 	 *
 	 * @return 	void
 	 * @access 	private
-	 * @since 	2.0
+	 * @since 	1.0.0
 	 */
 	private function setup_globals() {
-		$this->version    	= '2.0.0';
+		$this->version    	= '1.0.0';
 		$this->version_db 	= get_option( 'eddcf_version' );
 		$this->db_version 	= '1';
 
 		$this->file         = __FILE__;
-		$this->basename     = apply_filters( 'eddcf_plugin_basenname', plugin_basename( $this->file ) );
-		$this->plugin_dir   = apply_filters( 'eddcf_plugin_dir_path', plugin_dir_path( $this->file ) );
-		$this->plugin_url   = apply_filters( 'eddcf_plugin_dir_url', plugin_dir_url( $this->file ) );
-		$this->template_url = apply_filters( 'eddcf_plugin_template_url', 'crowdfunding/' );
-		$this->includes_dir = apply_filters( 'eddcf_includes_dir', $this->plugin_dir . 'includes/' );
-		$this->includes_url = apply_filters( 'eddcf_includes_url', $this->plugin_url . 'includes/' );
-		$this->lang_dir     = apply_filters( 'eddcf_lang_dir', $this->plugin_dir . 'languages/' );
+		$this->basename     = plugin_basename( $this->file );
+		$this->plugin_dir   = plugin_dir_path( $this->file );
+		$this->plugin_url   = plugin_dir_url( $this->file );
+		// $this->template_url = apply_filters( 'eddcf_plugin_template_url', 'crowdfunding/' );
+		$this->includes_dir = $this->plugin_dir . 'includes/';
+		$this->includes_url = $this->plugin_url . 'includes/';
+		$this->admin_dir	= $this->plugin_dir . 'admin/';
+		$this->public_dir	= $this->plugin_dir . 'public/';
 
 		$this->domain       = 'eddcf';
 	}
@@ -93,30 +100,21 @@ final class EDD_Crowdfunding {
 	 *
 	 * @return 	void
 	 * @access 	private
-	 * @since 	2.0
+	 * @since 	1.0.0
 	 */
-	private function includes() {
-		if ( ! class_exists( 'Easy_Digital_Downloads' ) )
-			return;
-
-		require_once( $this->includes_dir . 'class-campaigns.php' );
-		require_once( $this->includes_dir . 'class-campaign.php' );
-		require_once( $this->includes_dir . 'class-processing.php' );
-		require_once( $this->includes_dir . 'class-roles.php' );
-		require_once( $this->includes_dir . 'settings.php' );
-		require_once( $this->includes_dir . 'gateways.php' );
-		require_once( $this->includes_dir . 'theme-stuff.php' );
-		require_once( $this->includes_dir . 'logs.php' );
-		require_once( $this->includes_dir . 'export.php' );
-		require_once( $this->includes_dir . 'permalinks.php' );
-		require_once( $this->includes_dir . 'checkout.php' );
-
-		do_action( 'eddcf_include_files' );
-
-		if ( ! is_admin() )
-			return;
-
-		do_action( 'eddcf_include_admin_files' );
+	private function load_dependencies() {
+		
+		// require_once( $this->includes_dir . 'class-campaigns.php' );
+		// require_once( $this->includes_dir . 'class-campaign.php' );
+		// require_once( $this->includes_dir . 'class-processing.php' );
+		// require_once( $this->includes_dir . 'class-roles.php' );
+		// require_once( $this->includes_dir . 'settings.php' );
+		// require_once( $this->includes_dir . 'gateways.php' );
+		// require_once( $this->includes_dir . 'theme-stuff.php' );
+		// require_once( $this->includes_dir . 'logs.php' );
+		// require_once( $this->includes_dir . 'export.php' );
+		// require_once( $this->includes_dir . 'permalinks.php' );
+		// require_once( $this->includes_dir . 'checkout.php' );
 	}
 
 	/**
@@ -124,42 +122,97 @@ final class EDD_Crowdfunding {
 	 *
 	 * @return 	void
 	 * @access 	private
-	 * @since  	2.0
+	 * @since  	1.0.0
 	 */
-	private function setup_actions() {
-		add_action( 'init', array( $this, 'is_edd_activated' ), 1 );
-
-		if ( ! class_exists( 'Easy_Digital_Downloads' ) )
-			return;
-
+	private function attach_hooks_and_filters() {
 		// Scripts
-		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
+		// add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 
 		// Template Files
-		add_filter( 'template_include', array( $this, 'template_loader' ) );
+		// add_filter( 'template_include', array( $this, 'template_loader' ) );
 
 		// Upgrade Routine
-		add_action( 'admin_init', array( $this, 'check_upgrade' ) );
+		add_action( 'admin_init', array( $this, 'maybe_upgrade' ) );
 
 		// Textdomain
 		add_action( 'init', array( $this, 'load_textdomain' ) );
-
-		do_action( 'eddcf_setup_actions' );
 	}
 
 	/**
 	 * Perform upgrade routine if necessary. 
 	 *
 	 * @return 	void
-	 * @access 	private
-	 * @since 	2.0
+	 * @access 	public
+	 * @since 	1.0.0
 	 */
-	private function check_upgrade() {
+	public function maybe_upgrade() {
 		if ( $this->version_db !== $this->version ) {		
 			require_once( $this->includes_dir . 'class-crowdfunding-upgrade.php' );
 			EDD_Crowdfunding_Upgrade::upgrade_from( $this->version_db );
 		}
 	}
+
+	/**
+	 * Load admin functionality if we're in the admin area. 
+	 *
+	 * @return 	void
+	 * @access 	private
+	 * @since 	1.0.0
+	 */
+	private function maybe_load_admin() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+
+	}
+
+	/**
+	 * Load public functionality when we're on the front-facing side of the site.
+	 *
+	 * @return 	void
+	 * @access 	private
+	 * @since 	1.0.0
+	 */
+	private function maybe_load_public() {
+		if ( is_admin() ) {
+			return;
+		}
+	}
+
+	/**
+	 * Set up multilingual support. 
+	 *
+     * @access      public
+     * @since       1.0.0
+     * @return      void
+     */
+    public function load_textdomain() {
+        // Set filter for language directory
+        $lang_dir = $this->plugin_dir . 'languages/';
+        $lang_dir = apply_filters( 'eddcf_languages_directory', $this->plugin_dir . 'languages/' );
+
+        // Traditional WordPress plugin locale filter
+        $locale = apply_filters( 'plugin_locale', get_locale(), 'eddcf' );
+        $mofile = sprintf( '%1$s-%2$s.mo', 'eddcf', $locale );
+
+        // Setup paths to current locale file
+        $mofile_local   = $lang_dir . $mofile;
+        $mofile_global  = WP_LANG_DIR . '/eddcf/' . $mofile;
+
+        // Look in global /wp-content/languages/eddcf/ folder
+        if ( file_exists( $mofile_global ) ) { 
+            load_textdomain( 'eddcf', $mofile_global );
+        } 
+        // Look in local /wp-content/plugins/eddcf/languages/ folder
+        elseif ( file_exists( $mofile_local ) ) {            
+            load_textdomain( 'eddcf', $mofile_local );
+        } 
+        // Load the default language files
+        else {            
+            load_plugin_textdomain( 'eddcf', false, $lang_dir );
+        }
+    }
 
 	/**
 	 * Easy Digital Downloads
@@ -329,28 +382,69 @@ final class EDD_Crowdfunding {
 	}
 
 	/**
-	 * Loads the plugin language files
+	 * Return plugin includes directory. 
 	 *
-	 * @since  	2.0
+	 * @return 	string
+	 * @access 	public
+	 * @static
+	 * @since 	1.0.0
 	 */
-	public function load_textdomain() {
-		// Traditional WordPress plugin locale filter
-		$locale        = apply_filters( 'plugin_locale', get_locale(), $this->domain );
-		$mofile        = sprintf( '%1$s-%2$s.mo', $this->domain, $locale );
-
-		// Setup paths to current locale file
-		$mofile_local  = $this->lang_dir . $mofile;
-		$mofile_global = WP_LANG_DIR . '/' . $this->domain . '/' . $mofile;
-
-		// Look in global /wp-content/languages/atcf folder
-		load_textdomain( $this->domain, $mofile_global );
-
-		// Look in local /wp-content/plugins/appthemer-crowdfunding/languages/ folder
-		load_textdomain( $this->domain, $mofile_local );
+	public static function includes_dir() {
+		return plugin_dir_path( __FILE__ ) . 'includes/';
 	}
 
-	public function __destruct() {
+	/**
+	 * Runs on plugin activation. 
+	 *
+	 * @see register_activation_hook
+	 *
+	 * @return 	void
+	 * @access 	public
+	 * @static
+	 * @since	1.0.0
+	 */
+	public static function activate() {
+		require_once( self::includes_dir() . 'class-crowdfunding-install.php' );
+		new EDD_Crowdfunding_Install();
+	}
 
+	/**
+	 * Runs on plugin deactivation. 
+	 *
+	 * @see 	register_deactivation_hook
+	 *
+	 * @return 	void
+	 * @access 	public
+	 * @static
+	 * @since 	1.0.0
+	 */
+	public static function deactivate() {
+		require_once( self::includes_dir() . 'class-crowdfunding-uninstall.php' );
+		new EDD_Crowdfunding_Uninstall();
+	}
+
+	/**
+	 * Throw error on object clone. 
+	 *
+	 * This class is specifically designed to be instantiated once. You can retrieve the instance using get_charitable()
+	 *
+	 * @since 	1.0.0
+	 * @access 	public
+	 * @return 	void
+	 */
+	public function __clone() {
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'eddcf' ), '1.0' );
+	}
+
+	/**
+	 * Disable unserializing of the class. 
+	 *
+	 * @since 	1.0.0
+	 * @access 	public
+	 * @return 	void
+	 */
+	public function __wakeup() {
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'eddcf' ), '0.1' );
 	}
 }
 
@@ -364,31 +458,40 @@ final class EDD_Crowdfunding {
  * Example: <?php $crowdfunding = crowdfunding(); ?>
  *
  * @return 	EDD_Crowdfunding
- * @since  	2.0
+ * @since  	1.0.0
  */
 function crowdfunding() {
-	return EDD_Crowdfunding::instance();
+	// If Easy Digital Downloads isn't installed, we're going to short circuit and just display a warning. 
+	if ( ! class_exists( 'Easy_Digital_Downloads' ) ) {
+		if ( ! class_exists( 'EDD_Extension_Activation') ) {
+			require_once( 'includes/class-extension-activation.php' );
+
+			$activation = new EDD_Extension_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
+			$activation->run();	
+		}
+	} 
+	else {
+		return EDD_Crowdfunding::get_instance();
+	}	
 }
+
 add_action( 'plugins_loaded', 'crowdfunding' );
 
 /**
- * Activation
- *
- * A bit ghetto, but it's a way to get around a few quirks.
- * We need to wait for other plugins to be loaded for the majority of things
- * but the activation hook can't run then. So we need to fire this off
- * right away.
- *
- * @since Astoundify Crowdfunding 1.7.3.1
+ * Define the EDD slug
+ * 
+ * @uses 	eddcf_edd_slug
  */
-function atcf_install() {
-	$file         = __FILE__;
-	$plugin_dir   = apply_filters( 'atcf_plugin_dir_path',  plugin_dir_path( $file ) );
-	$includes_dir = apply_filters( 'atcf_includes_dir', trailingslashit( $plugin_dir . 'includes'  ) );
+define( 'EDD_SLUG', apply_filters( 'eddcf_edd_slug', 'campaigns' ) );
 
-	require_once( $includes_dir . 'class-roles.php' );
-	require_once( $includes_dir . 'class-install.php' );
-	register_activation_hook( $file, array( 'ATCF_Install', 'init' ), 10 );
-}
+/**
+ * Register the activation hook. 
+ */
+register_activation_hook( __FILE__, array( 'EDD_Crowdfunding', 'activate' ) );
 
-atcf_install();
+/**
+ * Ditto deactivation.
+ */
+register_deactivation_hook( __FILE__, array( 'EDD_Crowdfunding', 'deactivate' ) );
+
+endif; // End class_exists check
