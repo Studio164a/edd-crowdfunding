@@ -6,4 +6,6 @@ With Easy Digital Downloads and EDD Crowdfunding installed, you will be able to 
 
 ## Credits ##
 
-EDD Crowdfunding is based on Crowdfunding by Astoundify, which was removed from the WordPress.org plugin repository in August 2014. You can find a fork of Crowdfunding by Astoundify at https://github.com/Studio164a/appthemer-crowdfunding/
+EDD Crowdfunding is based on Crowdfunding by Astoundify (http://astoundify.com/). That plugin was removed from the WordPress.org plugin repository in August 2014. 
+
+You can find a fork of Crowdfunding by Astoundify at https://github.com/Studio164a/appthemer-crowdfunding/
