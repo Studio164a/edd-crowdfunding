@@ -2,9 +2,9 @@
 /**
  * Manage plugin installation.
  *
- * @class 		EDD_Crowdfunding_Install
+ * @class 		EDDCF_Install
  * @version		1.0
- * @package		EDD_Crowdfunding/Classes/EDD_Crowdfunding_Install
+ * @package		EDDCF/Classes/EDDCF_Install
  * @copyright 	Copyright (c) 2014, Eric Daams	
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @category	Class
@@ -14,14 +14,14 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'EDD_Crowdfunding_Install' ) ) : 
+if ( ! class_exists( 'EDDCF_Install' ) ) : 
 
 /**
- * EDD_Crowdfunding_Install
+ * EDDCF_Install
  *
  * @since 		1.0.0
  */
-class EDD_Crowdfunding_Install {
+class EDDCF_Install {
 
 	/**
 	 * Includes directory. 
@@ -39,27 +39,10 @@ class EDD_Crowdfunding_Install {
 	 */
 	public function __construct() {
 		$this->includes_dir = EDD_Crowdfunding::includes_dir();
-		
-		$this->setup_roles();
 
 		$this->setup_cron_jobs();
 
 		flush_rewrite_rules();
-	}
-
-	/**
-	 * Add roles & caps for EDD Crowdfunding. 
-	 *
-	 * @return 	void
-	 * @access 	private
-	 * @since 	1.0.0
-	 */
-	private function setup_roles() {
-		require_once( $this->includes_dir . 'class-crowdfunding-roles.php' );
-
-		$roles = new EDD_Crowdfunding_Roles;
-		$roles->add_roles();
-		$roles->add_caps();
 	}
 
 	/**

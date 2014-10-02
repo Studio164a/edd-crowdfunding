@@ -2,9 +2,9 @@
 /**
  * Manage plugin deactivation.
  *
- * @class 		EDD_Crowdfunding_Uninstall
+ * @class 		EDDCF_Uninstall
  * @version		1.0
- * @package		EDD_Crowdfunding/Classes/EDD_Crowdfunding_Uninstall
+ * @package		EDD_Crowdfunding/Classes/EDDCF_Uninstall
  * @copyright 	Copyright (c) 2014, Eric Daams	
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @category	Class
@@ -14,14 +14,14 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'EDD_Crowdfunding_Uninstall' ) ) : 
+if ( ! class_exists( 'EDDCF_Uninstall' ) ) : 
 
 /**
- * EDD_Crowdfunding_Uninstall
+ * EDDCF_Uninstall
  *
  * @since 		1.0.0
  */
-class EDD_Crowdfunding_Uninstall {
+class EDDCF_Uninstall {
 
 	/**
 	 * Create class object.

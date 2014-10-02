@@ -88,9 +88,10 @@ final class EDD_Crowdfunding {
 		$this->plugin_url   = plugin_dir_url( $this->file );
 		// $this->template_url = apply_filters( 'eddcf_plugin_template_url', 'crowdfunding/' );
 		$this->includes_dir = $this->plugin_dir . 'includes/';
-		$this->includes_url = $this->plugin_url . 'includes/';
 		$this->admin_dir	= $this->plugin_dir . 'admin/';
+		$this->admin_url	= $this->plugin_url . 'admin/';
 		$this->public_dir	= $this->plugin_dir . 'public/';
+		$this->public_url	= $this->plugin_url . 'public/';
 
 		$this->domain       = 'eddcf';
 	}
@@ -147,8 +148,8 @@ final class EDD_Crowdfunding {
 	 */
 	public function maybe_upgrade() {
 		if ( $this->version_db !== $this->version ) {		
-			require_once( $this->includes_dir . 'class-crowdfunding-upgrade.php' );
-			EDD_Crowdfunding_Upgrade::upgrade_from( $this->version_db );
+			require_once( $this->includes_dir . 'class-eddcf-upgrade.php' );
+			EDDCF_Upgrade::upgrade_from( $this->version_db, $this->version );
 		}
 	}
 
@@ -164,7 +165,9 @@ final class EDD_Crowdfunding {
 			return;
 		}
 
+		require_once( $this->admin_dir . 'class-eddcf-admin.php' );
 
+		add_action('eddcf_start', array( 'EDDCF_Admin', 'start' ) );
 	}
 
 	/**
@@ -178,14 +181,29 @@ final class EDD_Crowdfunding {
 		if ( is_admin() ) {
 			return;
 		}
+
+		require_once( $this->public_dir . 'class-eddcf-public.php' );
+		
+		add_action('eddcf_start', array( 'EDDCF_Public', 'start' ) );
+	}
+
+	/**
+	 * Tells us whether we're on the eddcf_start action. 
+	 *
+	 * @return 	bool
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function is_start() {
+		return 'eddcf_start' == current_filter();
 	}
 
 	/**
 	 * Set up multilingual support. 
 	 *
-     * @access      public
-     * @since       1.0.0
-     * @return      void
+	 * @return  void
+     * @access 	public
+     * @since   1.0.0     
      */
     public function load_textdomain() {
         // Set filter for language directory
@@ -213,42 +231,6 @@ final class EDD_Crowdfunding {
             load_plugin_textdomain( 'eddcf', false, $lang_dir );
         }
     }
-
-	/**
-	 * Easy Digital Downloads
-	 *
-	 * @since Astoundify Crowdfunding 0.2-alpha
-	 *
-	 * @return void
-	 */
-	function is_edd_activated() {
-		if ( ! class_exists( 'Easy_Digital_Downloads' ) ) {
-			if ( is_plugin_active( $this->basename ) ) {
-				deactivate_plugins( $this->basename );
-				unset( $_GET[ 'activate' ] ); // Ghetto
-
-				add_action( 'admin_notices', array( $this, 'edd_notice' ) );
-			}
-		}
-	}
-
-	/**
-	 * Admin notice.
-	 *
-	 * @since Astoundify Crowdfunding 0.2-alpha
-	 *
-	 * @return void
-	 */
-	function edd_notice() {
-?>
-		<div class="updated">
-			<p><?php printf(
-						__( '<strong>Notice:</strong> Crowdfunding by Astoundify requires <a href="%s">Easy Digital Downloads</a> in order to function properly.', 'atcf' ),
-						wp_nonce_url( network_admin_url( 'update.php?action=install-plugin&plugin=easy-digital-downloads' ), 'install-plugin_easy-digital-downloads' )
-				); ?></p>
-		</div>
-<?php
-	}
 
 	/**
 	 * Load a template.
@@ -323,65 +305,6 @@ final class EDD_Crowdfunding {
 	}
 
 	/**
-	 * Load scripts.
-	 *
-	 * @since Astoundify 1.6
-	 *
-	 * @param mixed $template
-	 * @return string $template The path of the file to include
-	 */
-	public function frontend_scripts() {
-		global $edd_options;
-
-		$is_campaign   = is_singular( 'download' ) || did_action( 'atcf_found_single' ) || apply_filters( 'atcf_is_campaign_page', false );
-
-		if ( ! ( $is_submission || $is_campaign ) )
-			return;
-
-		if ( $is_campaign ) {
-			wp_enqueue_script( 'formatCurrency', $this->plugin_url . 'assets/js/jquery.formatCurrency-1.4.0.pack.js', array( 'jquery' ) );
-		}
-
-		wp_enqueue_script( 'atcf-scripts', $this->plugin_url . 'assets/js/crowdfunding.js', array( 'jquery' ) );
-
-		$settings = array(
-			'pages' => array(
-				'is_submission' => $is_submission,
-				'is_campaign'   => $is_campaign
-			)
-		);
-
-		if ( $is_submission ) {
-			$settings[ 'submit' ] = array(
-				array(
-					'i18n' => array(
-						'oneReward' => __( 'At least one reward is required.', 'atcf' )
-					)
-				)
-			);
-		}
-
-		if ( $is_campaign ) {
-			global $post;
-
-			$campaign = atcf_get_campaign( $post );
-
-			$settings[ 'campaign' ] = array(
-				'i18n'        => array(),
-				'isDonations' => $campaign->is_donations_only(),
-				'currency'    => array(
-					'thousands' => $edd_options[ 'thousands_separator' ],
-					'decimal'   => $edd_options[ 'decimal_separator' ],
-					'symbol'    => edd_currency_filter( '' ),
-					'round'     => apply_filters( 'edd_format_amount_decimals', 2 )
-				)
-			);
-		}
-
-		wp_localize_script( 'atcf-scripts', 'atcfSettings', $settings );
-	}
-
-	/**
 	 * Return plugin includes directory. 
 	 *
 	 * @return 	string
@@ -404,8 +327,8 @@ final class EDD_Crowdfunding {
 	 * @since	1.0.0
 	 */
 	public static function activate() {
-		require_once( self::includes_dir() . 'class-crowdfunding-install.php' );
-		new EDD_Crowdfunding_Install();
+		require_once( self::includes_dir() . 'class-eddcf-install.php' );
+		new EDDCF_Install();
 	}
 
 	/**
@@ -419,8 +342,8 @@ final class EDD_Crowdfunding {
 	 * @since 	1.0.0
 	 */
 	public static function deactivate() {
-		require_once( self::includes_dir() . 'class-crowdfunding-uninstall.php' );
-		new EDD_Crowdfunding_Uninstall();
+		require_once( self::includes_dir() . 'class-eddcf-uninstall.php' );
+		new EDDCF_Uninstall();
 	}
 
 	/**
