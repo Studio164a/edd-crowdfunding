@@ -34,32 +34,34 @@ final class EDDCF_Admin {
 	/**
 	 * Instantiate object, but first verify that this is the eddcf_start action.
 	 *
-	 * @param 	EDDCF $eddcf
+	 * @param 	EDD_Crowdfunding $eddcf
 	 * @return 	void
 	 * @access 	public
 	 * @static
 	 * @since 	1.0.0
 	 */
-	public static function start( EDDCF $eddcf ) {
-		if ( ! $eddcf->is_start() ) {
+	public static function start( EDD_Crowdfunding $eddcf ) {
+		if ( false === $eddcf->is_start() ) {
 			return;
 		}
 
-		new EDDCF_Admin;
+		new EDDCF_Admin( $eddcf );
 	}
 
 	/**
 	 * Create class object.
 	 * 
-	 * @param 	EDDCF $eddcf
+	 * @param 	EDD_Crowdfunding $eddcf
 	 * @return 	void
 	 * @access 	private
 	 * @since	1.0.0
 	 */
-	private function __construct( EDDCF $eddcf ) {
-		$this->EDDCF = $eddcf;
+	private function __construct( EDD_Crowdfunding $eddcf ) {
+		$this->eddcf = $eddcf;
 		
-		$this->setup_admin_paths();
+		$this->setup_paths();
+
+		$this->load_dependencies();
 
 		$this->attach_hooks_and_filters();
 	}	
@@ -71,9 +73,23 @@ final class EDDCF_Admin {
 	 * @access 	private
 	 * @since 	1.0.0
 	 */
-	private function setup_admin_paths() {
+	private function setup_paths() {
 		$this->admin_dir = $this->eddcf->admin_dir;
 		$this->admin_url = $this->eddcf->admin_url;
+		$this->admin_includes = $this->admin_dir . 'includes/';
+	}
+
+	/**
+	 * Load files that we need. 
+	 *
+	 * @return 	void
+	 * @access 	private
+	 * @since 	1.0.0
+	 */
+	private function load_dependencies() {
+		require_once( $this->admin_includes . 'functions-eddcf-admin.php' );
+		require_once( $this->admin_includes . 'class-eddcf-metabox-helper.php' );
+		require_once( $this->admin_includes . 'class-eddcf-admin-campaign-post-type.php' );
 	}
 
 	/**
@@ -84,7 +100,8 @@ final class EDDCF_Admin {
 	 * @since 	1.0.0
 	 */
 	private function attach_hooks_and_filters() {
-		add_action( 'admin_enqueue_script', array( $this, 'admin_scripts' ) );
+		add_action( 'eddcf_start', array( 'EDDCF_Admin_Campaign_Post_Type', 'start' ), 5 );
+		add_action( 'admin_enqueue_script', array( $this, 'admin_scripts' ) );		
 	}
 
 	/**

@@ -15,6 +15,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 if ( ! class_exists( 'EDD_Crowdfunding' ) ) : 
+
 /**
  * Main Crowd Funding Class
  *
@@ -104,18 +105,9 @@ final class EDD_Crowdfunding {
 	 * @since 	1.0.0
 	 */
 	private function load_dependencies() {
-		
-		// require_once( $this->includes_dir . 'class-campaigns.php' );
-		// require_once( $this->includes_dir . 'class-campaign.php' );
-		// require_once( $this->includes_dir . 'class-processing.php' );
-		// require_once( $this->includes_dir . 'class-roles.php' );
-		// require_once( $this->includes_dir . 'settings.php' );
-		// require_once( $this->includes_dir . 'gateways.php' );
-		// require_once( $this->includes_dir . 'theme-stuff.php' );
-		// require_once( $this->includes_dir . 'logs.php' );
-		// require_once( $this->includes_dir . 'export.php' );
-		// require_once( $this->includes_dir . 'permalinks.php' );
-		// require_once( $this->includes_dir . 'checkout.php' );
+		require_once( $this->includes_dir . 'class-eddcf-campaign-post-type.php' );
+		require_once( $this->includes_dir . 'class-eddcf-campaign.php' );
+		require_once( $this->includes_dir . 'functions-eddcf-core.php' );
 	}
 
 	/**
@@ -126,6 +118,9 @@ final class EDD_Crowdfunding {
 	 * @since  	1.0.0
 	 */
 	private function attach_hooks_and_filters() {
+		// Various classes that need to be loaded at the start
+		add_action( 'eddcf_start', array( 'EDDCF_Campaign_Post_Type', 'start' ), 1 );
+		
 		// Scripts
 		// add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 
@@ -147,8 +142,10 @@ final class EDD_Crowdfunding {
 	 * @since 	1.0.0
 	 */
 	public function maybe_upgrade() {
-		if ( $this->version_db !== $this->version ) {		
+		if ( $this->version_db !== $this->version ) {	
+
 			require_once( $this->includes_dir . 'class-eddcf-upgrade.php' );
+			
 			EDDCF_Upgrade::upgrade_from( $this->version_db, $this->version );
 		}
 	}
@@ -378,12 +375,12 @@ final class EDD_Crowdfunding {
  * Use this function like you would a global variable, except without needing
  * to declare the global.
  *
- * Example: <?php $crowdfunding = crowdfunding(); ?>
+ * Example: <?php $crowdfunding = eddcf(); ?>
  *
  * @return 	EDD_Crowdfunding
  * @since  	1.0.0
  */
-function crowdfunding() {
+function eddcf() {
 	// If Easy Digital Downloads isn't installed, we're going to short circuit and just display a warning. 
 	if ( ! class_exists( 'Easy_Digital_Downloads' ) ) {
 		if ( ! class_exists( 'EDD_Extension_Activation') ) {
@@ -398,7 +395,7 @@ function crowdfunding() {
 	}	
 }
 
-add_action( 'plugins_loaded', 'crowdfunding' );
+add_action( 'plugins_loaded', 'eddcf' );
 
 /**
  * Define the EDD slug

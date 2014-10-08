@@ -34,30 +34,30 @@ final class EDDCF_Public {
 	/**
 	 * Instantiate object, but first verify that this is the eddcf_start action.
 	 *
-	 * @param 	EDDCF $EDDCF
+	 * @param 	EDD_Crowdfunding $eddcf
 	 * @return 	void
 	 * @access 	public
 	 * @static
 	 * @since 	1.0.0
 	 */
-	public static function start( EDDCF $eddcf ) {
+	public static function start( EDD_Crowdfunding $eddcf ) {
 		if ( ! $eddcf->is_start() ) {
 			return;
 		}
 
-		new EDDCF_Public;
+		new EDDCF_Public( $eddcf );
 	}
 
 	/**
 	 * Create class object.
 	 * 
-	 * @param 	EDDCF $eddcf
+	 * @param 	EDD_Crowdfunding $eddcf
 	 * @return 	void
 	 * @access 	private
 	 * @since	1.0.0
 	 */
-	private function __construct( EDDCF $eddcf ) {
-		$this->EDDCF = $eddcf;
+	private function __construct( EDD_Crowdfunding $eddcf ) {
+		$this->eddcf = $eddcf;
 		
 		$this->setup_public_paths();
 

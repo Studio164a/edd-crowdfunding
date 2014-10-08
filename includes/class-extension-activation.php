@@ -54,7 +54,6 @@ class EDD_Extension_Activation {
         }
     }
 
-
     /**
      * Process plugin deactivation
      *
@@ -66,7 +65,6 @@ class EDD_Extension_Activation {
         // Display notice
         add_action( 'admin_notices', array( $this, 'missing_edd_notice' ) );
     }
-
 
     /**
      * Display notice if EDD isn't installed
