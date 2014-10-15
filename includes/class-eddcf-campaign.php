@@ -121,7 +121,7 @@ class EDDCF_Campaign {
 			$this->campaign_type = $this->__get( 'campaign_type' );
 
 			if ( ! $this->campaign_type ) {
-				$this->campaign_type = atcf_campaign_type_default();
+				$this->campaign_type = eddcf_campaign_types()->default_type();
 			}
 		}
 		

@@ -79,26 +79,24 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @access  public
 	 * @since 	1.0.0
 	 */
-	public function setup() {
-		// add_filter( 'edd_price_options_heading', 'eddcf_edd_price_options_heading' );
-		// add_filter( 'edd_variable_pricing_toggle_text', 'eddcf_edd_variable_pricing_toggle_text' );
-
+	public function setup() {		
+		// Add fields to the dashboard listing of campaigns.
 		add_filter( 'manage_edit-download_columns', array( $this, 'dashboard_columns' ), 11, 1 );
 		add_filter( 'manage_download_posts_custom_column', array( $this, 'dashboard_column_item' ), 11, 2 );
 
+		// Add and remove metaboxes from the campaign editing page.
 		add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 11 );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 2 );
-		// add_action( 'edit_form_after_title', array( $this, 'goal_meta_box' ) );
-
 		add_filter( 'edd_metabox_fields_save', array( $this, 'meta_boxes_save' ) );
-		// add_filter( 'edd_metabox_save_campaign_end_date', 'eddcf_campaign_save_end_date' );
+		add_filter( 'edd_metabox_save_campaign_end_date', array( $this, 'save_end_date' ) );
+		remove_action( 'edd_meta_box_fields', 'edd_render_product_type_field', 10 );		
 
-		// remove_action( 'edd_meta_box_fields', 'edd_render_product_type_field', 10 );
-
-		// add_action( 'edd_download_price_table_head', 'eddcf_pledge_limit_head', 9 );
-		// add_action( 'edd_download_price_table_row', 'eddcf_pledge_limit_column', 9, 3 );
-
-		// add_action( 'edd_after_price_field', 'eddcf_after_price_field' );
+		// Change the price options metabox, adding a norewards field and 
+		add_filter( 'edd_price_options_heading', array( $this, 'price_options_heading' ) );
+		add_filter( 'edd_variable_pricing_toggle_text', array( $this, 'variable_pricing_toggle_text' ) );
+		add_action( 'edd_after_price_field', array( $this, 'norewards_field' ) );
+		add_action( 'edd_download_price_table_head', array( $this, 'reward_limit_head' ), 9 );
+		add_action( 'edd_download_price_table_row', array( $this, 'reward_limit_column' ), 9, 3 );
 
 		// add_action( 'wp_insert_post', array( $this, 'update_post_date_on_publish' ) );
 	}
@@ -203,28 +201,74 @@ class EDDCF_Admin_Campaign_Post_Type {
 		if ( eddcf_theme_supports( 'campaign-video' ) ) {
 			add_meta_box( 'eddcf_campaign_video', __( 'Campaign Video', 'eddcf' ), array( $this->metabox_helper, 'metabox_display' ), 'download', 'normal', 'high', array( 'view' => 'metaboxes/campaign-video' ) );
 		}
-
-		// add_action( 'edd_meta_box_fields', '_eddcf_metabox_campaign_info', 5 );
 	}
 
 	/**
-	 * Display the goal meta box after the campaign title.
+	 * Change the heading of the price options metabox. 
 	 *
-	 * @see 	edit_form_after_title
-	 * 	
-	 * @param 	WP_Post 	$post
-	 * @return 	void
-	 * @access 	public
+	 * @return 	string
+	 * @access  public
 	 * @since 	1.0.0
 	 */
-	public function goal_meta_box( $post ) {
-		// $screen = (object) get_current_screen();
+	public function price_options_heading() {
+		return __( 'Reward Options:', 'eddcf' );
+	}
 
-		// if ( 'download' !== $screen->post_type ) {
-		// 	return;
-		// }
+	/**
+	 * Change the description of the variable pricing field.
+	 *
+	 * @return 	string
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function variable_pricing_toggle_text() {
+		return __( 'Enable multiple reward options', 'eddcf' );
+	}
 
-		// $this->metabox_helper->display( 'metaboxes/campaign-goal' );		
+	/**
+	 * Insert no-rewards checkbox at the end of the price metabox. 
+	 *
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function norewards_field() {
+		eddcf_admin_view('metaboxes/campaign-rewards/norewards');
+	}
+
+	/**
+	 * Adds columns to the head of the reward options table.
+	 *
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function reward_limit_head() {
+		?>
+		<th id="campaign_reward_limit"><?php _e( 'Limit', 'eddcf' ); ?></th>
+		<th id="campaign_reward_backers"><?php _e( 'Backers', 'eddcf' ); ?></th>
+		<?php
+	}
+
+	/**
+	 * Adds columns to the body of the reward options table.
+	 *
+	 * @param 	int 		$post_id
+	 * @param 	string 		$key
+	 * @param 	array 		$args 
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function reward_limit_column( $post_id, $key, $args ) {
+		?>
+		<td>
+			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][limit]" id="edd_variable_prices[<?php echo $key; ?>][limit]" value="<?php echo isset ( $args[ 'limit' ] ) ? $args[ 'limit' ] : null; ?>" style="width:100%" placeholder="0" />
+		</td>
+		<td>
+			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][bought]" id="edd_variable_prices[<?php echo $key; ?>][bought]" value="<?php echo isset ( $args[ 'bought' ] ) ? $args[ 'bought' ] : null; ?>" style="width:100%" placeholder="0" />
+		</td>
+		<?php
 	}
 
 	/**
@@ -248,6 +292,56 @@ class EDDCF_Admin_Campaign_Post_Type {
 		$fields[] = 'campaign_author';
 		$fields[] = 'campaign_type';
 		return $fields;
+	}
+
+	/**
+	 * Validate and save the expiry date of the campaign. 
+	 *
+	 * @global 	WP_POST 	$post
+	 * @return 	string
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function save_end_date() {
+		global $post; 
+
+		if ( ! isset( $_POST[ 'campaign_end_aa' ] ) ) {
+			if ( 0 == $_POST[ 'campaign_endless' ] ) {
+				delete_post_meta( $post->ID, 'campaign_endless' );
+			}
+
+			return;
+		}
+
+		$aa = $_POST['campaign_end_aa'];
+		$mm = $_POST['campaign_end_mm'];
+		$jj = $_POST['campaign_end_jj'];
+		$hh = $_POST['campaign_end_hh'];
+		$mn = $_POST['campaign_end_mn'];
+		$ss = $_POST['campaign_end_ss'];
+
+		$aa = ($aa <= 0 ) ? date('Y') : $aa;
+		$mm = ($mm <= 0 ) ? date('n') : $mm;
+		$jj = ($jj > 31 ) ? 31 : $jj;
+		$jj = ($jj <= 0 ) ? date('j') : $jj;
+
+		$hh = ($hh > 23 ) ? $hh -24 : $hh;
+		$mn = ($mn > 59 ) ? $mn -60 : $mn;
+		$ss = ($ss > 59 ) ? $ss -60 : $ss;
+
+		$end_date = sprintf( "%04d-%02d-%02d %02d:%02d:%02d", $aa, $mm, $jj, $hh, $mn, $ss );
+
+		$valid_date = wp_checkdate( $mm, $jj, $aa, $end_date );
+
+		if ( ! $valid_date ) {
+			return new WP_Error( 'invalid_date', __( 'Whoops, the provided date is invalid.', 'atcf' ) );
+		}
+
+		if ( mysql2date( 'G', $end_date ) > current_time( 'timestamp' ) ) {
+			delete_post_meta( $post->ID, '_campaign_expired' );
+		}
+
+		return $end_date;
 	}
 
 	/**

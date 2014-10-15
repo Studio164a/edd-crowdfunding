@@ -86,7 +86,11 @@ class EDDCF_Metabox_Helper {
 
 		do_action( 'eddcf_metabox_before', $view );
 
+		do_action( "eddcf_metabox_{$view}_before", $view );
+
 		eddcf_admin_view( $view );
+
+		do_action( "eddcf_metabox_{$view}_after", $view );
 
 		do_action( 'eddcf_metabox_after', $view );
 	}

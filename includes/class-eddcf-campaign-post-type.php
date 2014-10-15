@@ -44,7 +44,7 @@ class EDDCF_Campaign_Post_Type {
 	 * @since	1.0.0
 	 */
 	private function __construct( EDD_Crowdfunding $eddcf ) {
-		$this->edd_crowdfunding = $eddcf;
+		$this->eddcf = $eddcf;
 
 		add_action( 'init', array( $this, 'setup' ), -1 );
 	}

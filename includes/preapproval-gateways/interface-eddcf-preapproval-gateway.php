@@ -32,6 +32,22 @@ interface EDDCF_Preapproval_Gateway {
 	 * @since 	1.0.0
 	 */
 	public function process_payment( $payment_id, EDDCF_Campaign $campaign );
+
+	/**
+	 * Whether preapproval support is enabled.
+	 * 
+	 * This method is called on the eddcf_has_preapproval_support hook. It 
+	 * allows the helper class to declare if preapproval support is activated. 
+	 *
+	 * @see 	EDDCF_Gateways::load_gateway_support()
+	 *
+	 * @param 	boolean 	$has_support
+	 * @return 	boolean
+	 * @access  public
+	 * @static
+	 * @since 	1.0.0
+	 */
+	public static function has_preapproval_support( $has_support );
 }
 
 endif; // End interface_exists check.

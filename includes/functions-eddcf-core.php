@@ -48,3 +48,23 @@ function eddcf_theme_supports( $feature ) {
 
 	return isset( $supports[ $feature ] );
 }
+
+/**
+ * Returns the one instance of EDDCF_Gateways. 
+ *
+ * @return 	EDDCF_Gateways	
+ * @since 	1.0.0
+ */
+function eddcf_gateways() {
+	return EDDCF_Gateways::get_instance();
+}
+
+/**
+ * Returns the one instance of EDDCF_Campaign_Types. 
+ *
+ * @return 	EDDCF_Campaign_Types
+ * @since 	1.0.0
+ */
+function eddcf_campaign_types() {
+	return EDDCF_Campaign_Types::get_instance();
+}

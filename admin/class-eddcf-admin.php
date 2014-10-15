@@ -101,7 +101,7 @@ final class EDDCF_Admin {
 	 */
 	private function attach_hooks_and_filters() {
 		add_action( 'eddcf_start', array( 'EDDCF_Admin_Campaign_Post_Type', 'start' ), 5 );
-		add_action( 'admin_enqueue_script', array( $this, 'admin_scripts' ) );		
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );		
 	}
 
 	/**
@@ -112,6 +112,29 @@ final class EDDCF_Admin {
 	 * @since 	1.0.0
 	 */
 	public function admin_scripts() {		
+		$screen = get_current_screen();
+
+		if ( in_array( $screen->id, $this->get_eddcf_screens() ) ) {
+			$assets_path = $this->admin_url . 'assets';
+
+			wp_register_style( 'eddcf-admin', $this->admin_url . 'assets/css/eddcf-admin.css', array(), EDD_Crowdfunding::VERSION );
+			wp_enqueue_style( 'eddcf-admin' );
+		}
+	}
+
+	/**
+	 * Returns an array of screen IDs where the Charitable scripts should be loaded. 
+	 *
+	 * @uses 	eddcf_admin_screens
+	 * 
+	 * @return 	array
+	 * @access 	private
+	 * @since 	1.0.0
+	 */
+	private function get_eddcf_screens() {
+		return apply_filters( 'eddcf_admin_screens', array(
+			'download'
+		) );
 	}
 }
 

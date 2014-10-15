@@ -31,6 +31,11 @@ final class EDD_Crowdfunding {
 	private static $instance;
 
 	/**
+	 * @var 	string
+	 */
+	const VERSION = '1.0.0';
+
+	/**
 	 * Main EDD_Crowdfunding instance.
 	 *
 	 * Ensures that only one instance of EDD_Crowdfunding exists in memory at any one
@@ -71,23 +76,17 @@ final class EDD_Crowdfunding {
 	}
 
 	/**
-	 * Set some smart defaults to class variables. Allow some of them to be
-	 * filtered to allow for early overriding.
+	 * Set some smart defaults to class variables.
 	 *
 	 * @return 	void
 	 * @access 	private
 	 * @since 	1.0.0
 	 */
 	private function setup_globals() {
-		$this->version    	= '1.0.0';
-		$this->version_db 	= get_option( 'eddcf_version' );
-		$this->db_version 	= '1';
-
 		$this->file         = __FILE__;
 		$this->basename     = plugin_basename( $this->file );
 		$this->plugin_dir   = plugin_dir_path( $this->file );
 		$this->plugin_url   = plugin_dir_url( $this->file );
-		// $this->template_url = apply_filters( 'eddcf_plugin_template_url', 'crowdfunding/' );
 		$this->includes_dir = $this->plugin_dir . 'includes/';
 		$this->admin_dir	= $this->plugin_dir . 'admin/';
 		$this->admin_url	= $this->plugin_url . 'admin/';
@@ -106,7 +105,9 @@ final class EDD_Crowdfunding {
 	 */
 	private function load_dependencies() {
 		require_once( $this->includes_dir . 'class-eddcf-campaign-post-type.php' );
+		require_once( $this->includes_dir . 'class-eddcf-campaign-types.php' );
 		require_once( $this->includes_dir . 'class-eddcf-campaign.php' );
+		require_once( $this->includes_dir . 'class-eddcf-gateways.php' );
 		require_once( $this->includes_dir . 'functions-eddcf-core.php' );
 	}
 
@@ -120,6 +121,7 @@ final class EDD_Crowdfunding {
 	private function attach_hooks_and_filters() {
 		// Various classes that need to be loaded at the start
 		add_action( 'eddcf_start', array( 'EDDCF_Campaign_Post_Type', 'start' ), 1 );
+		add_action( 'eddcf_start', array( 'EDDCF_Gateways', 'start' ), 1 );
 		
 		// Scripts
 		// add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
@@ -142,11 +144,13 @@ final class EDD_Crowdfunding {
 	 * @since 	1.0.0
 	 */
 	public function maybe_upgrade() {
-		if ( $this->version_db !== $this->version ) {	
+		$version_db = get_option( 'eddcf_version' );
+
+		if ( $version_db !== self::VERSION ) {	
 
 			require_once( $this->includes_dir . 'class-eddcf-upgrade.php' );
 			
-			EDDCF_Upgrade::upgrade_from( $this->version_db, $this->version );
+			EDDCF_Upgrade::upgrade_from( $version_db, self::VERSION );
 		}
 	}
 

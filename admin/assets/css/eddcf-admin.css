@@ -1,0 +1,15 @@
+/**
+ * EDD Crowdfunding Admin CSS
+ *
+ * @package     EDD Crowdfunding
+ * @subpackage  Admin CSS
+ * @copyright   Copyright (c) 2014, Eric Daams
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
+
+
+/* 1.0 -- Edit / Manage Campaigns
+================================================== */
+#campaign_goal { width: 80px; }
+#campaign_reward_limit, 
+#campaign_reward_backers { width: 60px; }
