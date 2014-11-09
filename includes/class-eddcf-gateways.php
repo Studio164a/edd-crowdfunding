@@ -60,7 +60,7 @@ class EDDCF_Gateways {
 	private function __construct( EDD_Crowdfunding $eddcf ) {
 		$this->eddcf = $eddcf;
 
-		add_action('init', array( $this, 'load_gateway_support' ), 1);
+		add_action( 'init', array( $this, 'load_gateway_support' ), 1 );
 	}
 
 	/**

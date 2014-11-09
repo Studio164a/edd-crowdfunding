@@ -123,12 +123,6 @@ final class EDD_Crowdfunding {
 		add_action( 'eddcf_start', array( 'EDDCF_Campaign_Post_Type', 'start' ), 1 );
 		add_action( 'eddcf_start', array( 'EDDCF_Gateways', 'start' ), 1 );
 		
-		// Scripts
-		// add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
-
-		// Template Files
-		// add_filter( 'template_include', array( $this, 'template_loader' ) );
-
 		// Upgrade Routine
 		add_action( 'admin_init', array( $this, 'maybe_upgrade' ) );
 
@@ -183,8 +177,8 @@ final class EDD_Crowdfunding {
 			return;
 		}
 
-		require_once( $this->public_dir . 'class-eddcf-public.php' );
-		
+		require_once( $this->public_dir . 'class-eddcf-public.php' );	
+
 		add_action('eddcf_start', array( 'EDDCF_Public', 'start' ) );
 	}
 
@@ -232,78 +226,6 @@ final class EDD_Crowdfunding {
             load_plugin_textdomain( 'eddcf', false, $lang_dir );
         }
     }
-
-	/**
-	 * Load a template.
-	 *
-	 * Handles template usage so that we can use our own templates instead of the themes.
-	 *
-	 * Templates are in the 'templates' folder. AT_CrowdFunding looks for theme
-	 * overides in /theme_directory/crowdfunding/ by default
-	 *
-	 * @see https://github.com/woothemes/woocommerce/blob/master/woocommerce.php
-	 *
-	 * @access public
-	 * @param mixed $template
-	 * @return string $template The path of the file to include
-	 */
-	public function template_loader( $template ) {
-		global $wp_query;
-
-		$find    = array();
-		$files   = array();
-
-		/** Check if we are editing */
-		if ( isset ( $wp_query->query_vars[ 'edit' ] ) &&
-			 is_singular( 'download' ) &&
-			 ( $wp_query->queried_object->post_author == get_current_user_id() || current_user_can( 'manage_options' ) ) &&
-			 atcf_theme_supports( 'campaign-edit' )
-		) {
-			do_action( 'atcf_found_edit' );
-
-			$files = apply_filters( 'atcf_crowdfunding_templates_edit', array( 'single-campaign-edit.php' ) );
-		}
-
-		/** Check if viewing a widget */
-		else if ( isset ( $wp_query->query_vars[ 'widget' ] ) &&
-			 is_singular( 'download' ) &&
-			 atcf_theme_supports( 'campaign-widget' )
-		) {
-			do_action( 'atcf_found_widget' );
-
-			$files = apply_filters( 'atcf_crowdfunding_templates_widget', array( 'campaign-widget.php' ) );
-		}
-
-		/** Check if viewing standard campaign */
-		else if ( is_singular( 'download' ) ) {
-			do_action( 'atcf_found_single' );
-
-			$files = apply_filters( 'atcf_crowdfunding_templates_campaign', array( 'single-campaign.php', 'single-download.php', 'single.php' ) );
-		}
-
-		/** Check if viewing archives */
-		else if ( is_post_type_archive( 'download' ) || is_tax( array( 'download_category', 'download_tag' ) ) ) {
-			do_action( 'atcf_found_archive' );
-
-			$files = apply_filters( 'atcf_crowdfunding_templates_archive', array( 'archive-campaigns.php', 'archive-download.php', 'archive.php' ) );
-		}
-
-		$files = apply_filters( 'atcf_template_loader', $files );
-
-		foreach ( $files as $file ) {
-			$find[] = $file;
-			$find[] = $this->template_url . $file;
-		}
-
-		if ( ! empty( $files ) ) {
-			$template = locate_template( $find );
-
-			if ( ! $template )
-				$template = $this->plugin_dir . 'templates/' . $file;
-		}
-
-		return $template;
-	}
 
 	/**
 	 * Return plugin includes directory. 

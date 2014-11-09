@@ -58,10 +58,14 @@ final class EDDCF_Public {
 	 */
 	private function __construct( EDD_Crowdfunding $eddcf ) {
 		$this->eddcf = $eddcf;
-		
-		$this->setup_public_paths();
+
+		$this->setup_paths();
+
+		$this->load_dependencies();		
 
 		$this->attach_hooks_and_filters();
+
+		do_action( 'eddcf_public_start', $this, $eddcf );
 	}	
 
 	/**
@@ -71,10 +75,22 @@ final class EDDCF_Public {
 	 * @access 	private
 	 * @since 	1.0.0
 	 */
-	private function setup_public_paths() {
+	private function setup_paths() {
 		$this->public_dir = $this->eddcf->public_dir;
 		$this->public_url = $this->eddcf->public_url;
+		$this->public_includes = $this->public_dir . 'includes/';
 	}
+
+	/**
+	 * Load files that we need. 
+	 *
+	 * @return 	void
+	 * @access 	private
+	 * @since 	1.0.0
+	 */
+	private function load_dependencies() {
+		require_once( $this->public_includes . 'class-eddcf-templates.php' );
+	}	
 
 	/**
 	 * Set up hooks and filters. 
@@ -84,7 +100,19 @@ final class EDDCF_Public {
 	 * @since 	1.0.0
 	 */
 	private function attach_hooks_and_filters() {
-		add_action( 'wp_enqueue_script', array( $this, 'frontend_scripts' ) );
+		add_action( 'eddcf_public_start', array( 'EDDCF_Templates', 'start' ), 10, 2 );
+		// add_action( 'wp_enqueue_script', array( $this, 'frontend_scripts' ) );
+	}
+
+	/**
+	 * Checks whether we're currently on the public start hook.  
+	 *
+	 * @return 	booolean
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function is_start() {
+		return 'eddcf_public_start' == current_filter();
 	}
 
 	/**

@@ -111,7 +111,7 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @access 	public
 	 * @since  	1.0.0
 	 */
-	public function dashboard_columns( $columns ) {
+	public function dashboard_columns( $column_names ) {
 		$columns = apply_filters( 'eddcf_dashboard_columns', array(
 			'cb'                => '<input type="checkbox"/>',
 			'title'             => __( 'Name', 'eddcf' ),
@@ -138,13 +138,13 @@ class EDDCF_Admin_Campaign_Post_Type {
 	public function dashboard_column_item( $column_name, $post_id ) {
 		$campaign = eddcf_get_campaign( $post_id );
 
-		switch ( $column ) {
+		switch ( $column_name ) {
 			case 'funded' :
 				printf( _x( '%s of %s', 'funded of goal', 'eddcf' ), $campaign->current_amount( true ), $campaign->goal( true ) );
 				break;
 
 			case 'expires' :
-				echo $campaign->is_endless() ? '&mdash;' : $campaign->days_remaining();
+				echo $campaign->is_endless() ? '&mdash;' : $campaign->time_remaining( 'days' );
 				break;
 
 			case 'type' :
@@ -201,75 +201,7 @@ class EDDCF_Admin_Campaign_Post_Type {
 		if ( eddcf_theme_supports( 'campaign-video' ) ) {
 			add_meta_box( 'eddcf_campaign_video', __( 'Campaign Video', 'eddcf' ), array( $this->metabox_helper, 'metabox_display' ), 'download', 'normal', 'high', array( 'view' => 'metaboxes/campaign-video' ) );
 		}
-	}
-
-	/**
-	 * Change the heading of the price options metabox. 
-	 *
-	 * @return 	string
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public function price_options_heading() {
-		return __( 'Reward Options:', 'eddcf' );
-	}
-
-	/**
-	 * Change the description of the variable pricing field.
-	 *
-	 * @return 	string
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public function variable_pricing_toggle_text() {
-		return __( 'Enable multiple reward options', 'eddcf' );
-	}
-
-	/**
-	 * Insert no-rewards checkbox at the end of the price metabox. 
-	 *
-	 * @return 	void
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public function norewards_field() {
-		eddcf_admin_view('metaboxes/campaign-rewards/norewards');
-	}
-
-	/**
-	 * Adds columns to the head of the reward options table.
-	 *
-	 * @return 	void
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public function reward_limit_head() {
-		?>
-		<th id="campaign_reward_limit"><?php _e( 'Limit', 'eddcf' ); ?></th>
-		<th id="campaign_reward_backers"><?php _e( 'Backers', 'eddcf' ); ?></th>
-		<?php
-	}
-
-	/**
-	 * Adds columns to the body of the reward options table.
-	 *
-	 * @param 	int 		$post_id
-	 * @param 	string 		$key
-	 * @param 	array 		$args 
-	 * @return 	void
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public function reward_limit_column( $post_id, $key, $args ) {
-		?>
-		<td>
-			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][limit]" id="edd_variable_prices[<?php echo $key; ?>][limit]" value="<?php echo isset ( $args[ 'limit' ] ) ? $args[ 'limit' ] : null; ?>" style="width:100%" placeholder="0" />
-		</td>
-		<td>
-			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][bought]" id="edd_variable_prices[<?php echo $key; ?>][bought]" value="<?php echo isset ( $args[ 'bought' ] ) ? $args[ 'bought' ] : null; ?>" style="width:100%" placeholder="0" />
-		</td>
-		<?php
-	}
+	}	
 
 	/**
 	 * Save campaign information. 
@@ -345,29 +277,72 @@ class EDDCF_Admin_Campaign_Post_Type {
 	}
 
 	/**
-	 * When a campaign is published, reset the campaign end date based
-	 * on the original number of days set when submitting.
+	 * Change the heading of the price options metabox. 
 	 *
-	 * @since Astoundify Crowdfunding 1.6
-	 *
-	 * @return void
+	 * @return 	string
+	 * @access  public
+	 * @since 	1.0.0
 	 */
-	public function update_post_date_on_publish() {
-		global $post;
+	public function price_options_heading() {
+		return __( 'Reward Options:', 'eddcf' );
+	}
 
-		if ( ! isset ( $post ) )
-			return;
+	/**
+	 * Change the description of the variable pricing field.
+	 *
+	 * @return 	string
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function variable_pricing_toggle_text() {
+		return __( 'Enable multiple reward options', 'eddcf' );
+	}
 
-		if ( 'pending' != $post->post_status )
-			return $post;
+	/**
+	 * Insert no-rewards checkbox at the end of the price metabox. 
+	 *
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function norewards_field() {
+		eddcf_admin_view('metaboxes/campaign-rewards/norewards');
+	}
 
-		$length = $post->campaign_length;
+	/**
+	 * Adds columns to the head of the reward options table.
+	 *
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function reward_limit_head() {
+		?>
+		<th id="campaign_reward_limit"><?php _e( 'Limit', 'eddcf' ); ?></th>
+		<th id="campaign_reward_backers"><?php _e( 'Backers', 'eddcf' ); ?></th>
+		<?php
+	}
 
-		$end_date = strtotime( sprintf( '+%d days', $length ) );
-		$end_date = get_gmt_from_date( date( 'Y-m-d H:i:s', $end_date ) );
-
-		update_post_meta( $post->ID, 'campaign_end_date', sanitize_text_field( $end_date ) );
-	}	
+	/**
+	 * Adds columns to the body of the reward options table.
+	 *
+	 * @param 	int 		$post_id
+	 * @param 	string 		$key
+	 * @param 	array 		$args 
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function reward_limit_column( $post_id, $key, $args ) {
+		?>
+		<td>
+			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][limit]" id="edd_variable_prices[<?php echo $key; ?>][limit]" value="<?php echo isset ( $args[ 'limit' ] ) ? $args[ 'limit' ] : null; ?>" style="width:100%" placeholder="0" />
+		</td>
+		<td>
+			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][bought]" id="edd_variable_prices[<?php echo $key; ?>][bought]" value="<?php echo isset ( $args[ 'bought' ] ) ? $args[ 'bought' ] : null; ?>" style="width:100%" placeholder="0" />
+		</td>
+		<?php
+	}
 }
 
 endif; // End class_exists check
