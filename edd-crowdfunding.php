@@ -21,7 +21,7 @@ if ( ! class_exists( 'EDD_Crowdfunding' ) ) :
  *
  * @since 		1.0.0
  */
-final class EDD_Crowdfunding {
+class EDD_Crowdfunding {
 
 	/**
 	 * @var 	EDD_Crowdfunding
@@ -34,6 +34,12 @@ final class EDD_Crowdfunding {
 	 * @var 	string
 	 */
 	const VERSION = '1.0.0';
+
+	/**
+	 * @var 	boolean
+	 * @access 	private
+	 */
+	private $atcf_compatibility; 
 
 	/**
 	 * Main EDD_Crowdfunding instance.
@@ -109,6 +115,28 @@ final class EDD_Crowdfunding {
 		require_once( $this->includes_dir . 'class-eddcf-campaign.php' );
 		require_once( $this->includes_dir . 'class-eddcf-gateways.php' );
 		require_once( $this->includes_dir . 'functions-eddcf-core.php' );
+
+		$this->maybe_load_atcf_compat();
+	}
+
+	/**
+	 * Load compatibility functions/classes for Crowdfunding by Astoundify
+	 *
+	 * @return 	void
+	 * @access 	private
+	 * @since 	1.0.0
+	 */
+	private function maybe_load_atcf_compat() {
+		$compatibility_mode = true;
+
+		// You can remove compatibility mode if you didn't previously 
+		// use Crowdfunding by Astoundify or if you've updated your codebase.
+		if ( defined( 'ATCF_COMPATIBILITY' ) ) {
+			$compatibility_mode = ATCF_COMPATIBILITY;
+		}
+
+		require_once( $this->includes_dir . 'atcf-compat/atcf-compat-functions.php' );
+		require_once( $this->includes_dir . 'atcf-compat/atcf-compat-classes.php' );
 	}
 
 	/**
