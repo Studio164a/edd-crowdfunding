@@ -55,3 +55,32 @@ if ( ! function_exists( 'eddcf_get_pledge_amount_text' ) ) :
 	} 
 
 endif;
+
+
+/**
+ * Get currency symbol. 
+ * 
+ * @return 	string
+ * @since 	1.0.0
+ */
+if ( ! function_exists( 'eddcf_get_currency_symbol' ) ) : 
+
+	function eddcf_get_currency_symbol() {
+		$currency = edd_get_currency();
+
+		switch ( $currency ) {
+			case "GBP" : return '&pound;'; break;
+			case "BRL" : return 'R&#36;'; break;
+			case "USD" :
+			case "AUD" :
+			case "CAD" :
+			case "HKD" :
+			case "MXN" :
+			case "SGD" : return '&#36;'; break;
+			case "JPY" : return '&yen;'; break;
+			case "EUR" : return '&euro;'; break;
+			default : return $currency;
+		}	
+	}
+
+endif;

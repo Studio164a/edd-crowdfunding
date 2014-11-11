@@ -1,2 +1,4 @@
 .DS_Store
 _legacy
+.sass-cache
+node_modules

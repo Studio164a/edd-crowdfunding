@@ -20,7 +20,7 @@ if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) : ?>
 <?php
 elseif ( count( $prices )) : ?>
 
-	<ul class="campaign-pledge-levels">			
+	<ul class="pledge-options">			
 
 		<?php foreach ( $prices as $i => $price ) : ?>
 
@@ -30,7 +30,7 @@ elseif ( count( $prices )) : ?>
 				$class = ! $has_limit ? 'limitless' : ( $remaining == 0 ? 'not-available' : 'available' );
 			?>
 
-			<li data-price="<?php echo edd_sanitize_amount( $price['amount'] )?>" class="pledge-level <?php echo $class ?>">
+			<li data-price="<?php echo edd_sanitize_amount( $price['amount'] )?>" class="pledge-option <?php echo $class ?>">
 				
 				<?php if ( ! $has_limit ) : ?>
 
