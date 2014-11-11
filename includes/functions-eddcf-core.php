@@ -68,3 +68,17 @@ function eddcf_gateways() {
 function eddcf_campaign_types() {
 	return EDDCF_Campaign_Types::get_instance();
 }
+
+/**
+ * Calls an EDDCF template. 
+ *
+ * @param 	string|array $template_name 	A single template name or an ordered array of template
+ * @param 	bool $load 						If true the template file will be loaded if it is found.
+ * @param 	bool $require_once 				Whether to require_once or require. Default true. Has no effect if $load is false.
+ * @return 	void
+ * @since 	1.0.0
+ */
+function eddcf_get_template( $template_name, $load = false, $require_once = true ) {
+	$template = new EDDCF_Template( $template_name, $load, $require_once );
+	$template->render();
+}

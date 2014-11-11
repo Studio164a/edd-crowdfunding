@@ -61,8 +61,6 @@ final class EDDCF_Public {
 
 		$this->setup_paths();
 
-		$this->load_dependencies();		
-
 		$this->attach_hooks_and_filters();
 
 		do_action( 'eddcf_public_start', $this, $eddcf );
@@ -82,17 +80,6 @@ final class EDDCF_Public {
 	}
 
 	/**
-	 * Load files that we need. 
-	 *
-	 * @return 	void
-	 * @access 	private
-	 * @since 	1.0.0
-	 */
-	private function load_dependencies() {
-		require_once( $this->public_includes . 'class-eddcf-templates.php' );
-	}	
-
-	/**
 	 * Set up hooks and filters. 
 	 *
 	 * @return 	void
@@ -100,19 +87,7 @@ final class EDDCF_Public {
 	 * @since 	1.0.0
 	 */
 	private function attach_hooks_and_filters() {
-		add_action( 'eddcf_public_start', array( 'EDDCF_Templates', 'start' ), 10, 2 );
 		// add_action( 'wp_enqueue_script', array( $this, 'frontend_scripts' ) );
-	}
-
-	/**
-	 * Checks whether we're currently on the public start hook.  
-	 *
-	 * @return 	booolean
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public function is_start() {
-		return 'eddcf_public_start' == current_filter();
 	}
 
 	/**

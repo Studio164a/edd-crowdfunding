@@ -184,14 +184,25 @@ class EDDCF_Campaign {
 	}
 	
 	/**
-	 * Whether this campaign provides rewards. 
+	 * Whether this campaign is only for donations (no rewards are provided). 
 	 *
 	 * @return 	boolean
 	 * @access  public
 	 * @since 	1.0.0
 	 */
-	public function has_rewards() {
+	public function is_donations_only() {
 		return $this->__get( 'campaign_norewards' );
+	}
+
+	/**
+	 * Whether this campaign offers multiple rewards options.
+	 *
+	 * @return 	boolean
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function has_reward_options() {
+		return $this->__get( '_variable_pricing' ) || count( edd_get_variable_prices( $this->ID ) ); 
 	}
 	
 	/**

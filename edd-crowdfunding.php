@@ -114,7 +114,10 @@ class EDD_Crowdfunding {
 		require_once( $this->includes_dir . 'class-eddcf-campaign-types.php' );
 		require_once( $this->includes_dir . 'class-eddcf-campaign.php' );
 		require_once( $this->includes_dir . 'class-eddcf-gateways.php' );
+		require_once( $this->includes_dir . 'class-eddcf-templates.php' );
+		require_once( $this->includes_dir . 'class-eddcf-template.php' );
 		require_once( $this->includes_dir . 'functions-eddcf-core.php' );
+		require_once( $this->includes_dir . 'functions-eddcf-template.php' );
 
 		$this->maybe_load_atcf_compat();
 	}
@@ -137,6 +140,7 @@ class EDD_Crowdfunding {
 
 		require_once( $this->includes_dir . 'atcf-compat/atcf-compat-functions.php' );
 		require_once( $this->includes_dir . 'atcf-compat/atcf-compat-classes.php' );
+		require_once( $this->includes_dir . 'atcf-compat/atcf-compat-hooks.php' );
 	}
 
 	/**
@@ -150,6 +154,7 @@ class EDD_Crowdfunding {
 		// Various classes that need to be loaded at the start
 		add_action( 'eddcf_start', array( 'EDDCF_Campaign_Post_Type', 'start' ), 1 );
 		add_action( 'eddcf_start', array( 'EDDCF_Gateways', 'start' ), 1 );
+		add_action( 'eddcf_start', array( 'EDDCF_Templates', 'start' ), 1 );
 		
 		// Upgrade Routine
 		add_action( 'admin_init', array( $this, 'maybe_upgrade' ) );

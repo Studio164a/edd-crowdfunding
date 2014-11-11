@@ -24,13 +24,6 @@ if ( ! class_exists( 'EDDCF_Templates' ) ) :
 class EDDCF_Templates {
 
 	/**
-	 * The EDDCF_Public object. 
-	 * @var 	EDDCF_Public
-	 * @access  private
-	 */
-	private $eddcf_public;
-
-	/**
 	 * The main EDD_Crowdfunding object. 
 	 * @var 	EDD_Crowdfunding
 	 * @access  private
@@ -43,19 +36,24 @@ class EDDCF_Templates {
 	 * Since this is a private constructor, there is only one way to create 
 	 * a class object, which is through the start() method below.
 	 * 
-	 * @param 	EDDCF_Public 		$eddcf_public
 	 * @param 	EDD_Crowdfunding 	$eddcf
 	 * @return 	void
 	 * @access 	private
 	 * @since	1.0.0
 	 */
-	private function __construct( EDDCF_Public $eddcf_public, EDD_Crowdfunding $eddcf ) {
-		$this->eddcf_public = $eddcf_public;
+	private function __construct( EDD_Crowdfunding $eddcf ) {
 		$this->eddcf = $eddcf;
-		$this->base_templates = $this->eddcf_public->public_dir . 'templates/';
+		$this->base_templates = $this->eddcf->public_dir . 'templates/';
 		$this->theme_templates = apply_filters( 'eddcf_theme_template_path', 'eddcf/' );
 
+		// Set up base templates for campaign widget, single campaign and archive.
 		add_filter( 'template_include', array( $this, 'template_loader' ) );
+
+		// Set up pledge options form.
+		remove_action( 'edd_purchase_link_top', 'edd_purchase_variable_pricing', 10 );
+		add_action( 'edd_purchase_link_top', array( $this, 'pledge_options' ), 10 );
+		add_action( 'eddcf_campaign_pledge_options', array( $this, 'pledge_options_list' ), 10 );
+		add_action( 'edd_after_price_options', array( $this, 'custom_pledge' ), 5 );
 	}
 
 	/**
@@ -66,18 +64,18 @@ class EDDCF_Templates {
 	 * @access  public
 	 * @since 	1.0.0
 	 */
-	public static function start( EDDCF_Public $eddcf_public, EDD_Crowdfunding $eddcf ) {
-		if ( false === $eddcf_public->is_start() ) {
+	public static function start( EDD_Crowdfunding $eddcf ) {
+		if ( false === $eddcf->is_start() ) {
 			return;
 		}
 
-		new EDDCF_Templates( $eddcf_public, $eddcf );
+		new EDDCF_Templates( $eddcf );
 	}
 
 	/**
 	 * Load a template. 
 	 *  
-	 * @globa 	WP_Query 	$wp_query
+	 * @global 	WP_Query 	$wp_query
 	 * @param  	string 		$template
 	 * @return 	string
 	 * @access  public
@@ -110,20 +108,8 @@ class EDDCF_Templates {
 
 		$files = apply_filters( 'eddcf_template_loader', $files );
 
-		foreach ( $files as $file ) {
-			$find[] = $file;
-			$find[] = $this->theme_templates . $file;
-		}
-
-		if ( ! empty( $files ) ) {
-			$template = locate_template( $find );
-
-			if ( ! $template ) {
-				$template = $this->base_templates . $file;
-			}
-		}
-
-		return $template;
+		$template = new EDDCF_Template( $files );
+		return $template->locate_template();
 	}
 
 	/**
@@ -163,6 +149,50 @@ class EDDCF_Templates {
 	 */
 	private function is_campaigns_archive( $wp_query ) {
 		return is_post_type_archive( 'download' ) || is_tax( array( 'download_category', 'download_tag' ) );
+	}
+
+	/**
+	 * Set up the main pledge options template. 
+	 *
+	 * @param 	int 		$donation_id
+	 * @return 	void
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function pledge_options(  $download_id ) {
+		$variable_pricing = edd_has_variable_prices( $download_id );
+
+		if ( ! $variable_pricing ) {
+			return;
+		}
+
+		eddcf_get_template( 'campaign-pledge-options.php' );
+	}
+
+	/**
+	 * Display the list of pledge options with checkboxes/radio elements.
+	 *
+	 * @return 	void
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function pledge_options_list() {
+		eddcf_get_template( 'campaign-pledge-options/pledge-options.php' );
+	}
+
+	/**
+	 * Display the custom pledge field. 
+	 * 
+	 * @return 	void
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function custom_pledge() {
+		global $edd_options;
+
+		//if ( isset( $edd_options[ 'atcf_settings_custom_pledge' ] ) ) {
+			eddcf_get_template( 'campaign-pledge-options/custom-pledge.php' );
+		//}
 	}
 }
 
