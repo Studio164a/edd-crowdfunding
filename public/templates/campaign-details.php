@@ -7,6 +7,10 @@
  */
 
 $campaign = eddcf_get_campaign();
+
+if ( false === $campaign->is_crowdfunding_campaign() ) {
+	return;
+}
 ?>
 <div class="campaign-details">
 <?php

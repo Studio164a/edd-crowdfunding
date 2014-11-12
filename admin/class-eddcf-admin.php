@@ -101,7 +101,7 @@ final class EDDCF_Admin {
 	 */
 	private function attach_hooks_and_filters() {
 		add_action( 'eddcf_start', array( 'EDDCF_Admin_Campaign_Post_Type', 'start' ), 5 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );		
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 	}
 
 	/**

@@ -38,6 +38,13 @@ class EDDCF_Campaign {
 	private $campaign_data;
 
 	/**
+	 * Whether crowdfunding is disabled for this product.
+	 * @var 	boolean
+	 * @access 	private
+	 */
+	private $crowdfunding_disabled;
+
+	/**
 	 * The type of campaign. 
 	 * @var 	string
 	 * @access 	private
@@ -69,6 +76,7 @@ class EDDCF_Campaign {
 	public function __construct( $post ) {
 		$this->campaign_data = get_post( $post );
 		$this->ID = $this->campaign_data->ID;
+		$this->crowdfunding_disabled = eddcf_crowdfunding_disabled( $this->campaign_data );
 	}
 
 	/**
@@ -85,6 +93,17 @@ class EDDCF_Campaign {
 	public function __get( $key ) {
 		$meta = apply_filters( 'eddcf_campaign_meta_' . $key, $this->campaign_data->__get( $key ) );
 		return $meta;
+	}
+
+	/**
+	 * Is crowdfunding disabled?
+	 *
+	 * @return 	boolean
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function is_crowdfunding_campaign() {
+		return false === $this->crowdfunding_disabled;
 	}
 
 	/**
@@ -355,7 +374,7 @@ class EDDCF_Campaign {
 
 		// Endless campaign.
 		if ( $this->is_endless() ) {
-			$time_left = apply_filters( 'eddcf_endless_campaign_time_left', _( 'Campaign has no end', 'eddcf' ) );
+			$time_left = apply_filters( 'eddcf_endless_campaign_time_left', __( 'Campaign has no end', 'eddcf' ) );
 		}
 
 		// Campaign is no longer active.

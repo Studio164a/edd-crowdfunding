@@ -85,12 +85,13 @@ class EDDCF_Admin_Campaign_Post_Type {
 		add_filter( 'manage_download_posts_custom_column', array( $this, 'dashboard_column_item' ), 11, 2 );
 
 		// Add and remove metaboxes from the campaign editing page.
-		add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 11 );
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 2 );
+		add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 11, 2 );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 2, 2 );
 		add_filter( 'edd_metabox_fields_save', array( $this, 'meta_boxes_save' ) );
+		add_filter( 'edd_metabox_save_crowdfunding_disabled', array( $this, 'save_crowdfunding_disabled' ) );
 		add_filter( 'edd_metabox_save_campaign_end_date', array( $this, 'save_end_date' ) );
 		remove_filter( 'edd_metabox_save_edd_variable_prices', 'edd_sanitize_variable_prices_save' );
-		add_filter( 'edd_metabox_save_edd_variable_prices', array( $this, 'save_rewards' ) );
+		add_filter( 'edd_metabox_save_edd_variable_prices', array( $this, 'save_rewa,rds' ) );
 		remove_action( 'edd_meta_box_fields', 'edd_render_product_type_field', 10 );		
 
 		// Change the price options metabox, adding a norewards field and 
@@ -100,8 +101,6 @@ class EDDCF_Admin_Campaign_Post_Type {
 		add_action( 'edd_download_price_table_head', array( $this, 'reward_limit_head' ), 9 );
 		add_action( 'edd_download_price_table_row', array( $this, 'reward_limit_column' ), 9, 3 );
 		add_filter( 'edd_price_row_args', array( $this, 'reward_row_args' ), 10, 2 );
-
-		// add_action( 'wp_insert_post', array( $this, 'update_post_date_on_publish' ) );
 	}
 
 	/**
@@ -164,6 +163,20 @@ class EDDCF_Admin_Campaign_Post_Type {
 	}
 
 	/**
+	 * Return whether crowdfunding is disabled for the current download.
+	 *
+	 * @global 	WP_Post 	$post
+	 * @return 	boolean
+	 * @access 	private
+	 * @since 	1.0.0
+	 */
+	private function is_crowdfunding_disabled() {
+		global $post;
+
+		return eddcf_crowdfunding_disabled( $post );
+	}
+
+	/**
 	 * Remove some of the default EDD metaboxes which are not relevant 
 	 * to crowdfunding, or which we're going to replace with our own version.
 	 *
@@ -172,6 +185,10 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0	
 	 */
 	public function remove_meta_boxes() {
+		if ( $this->is_crowdfunding_disabled( $post ) ) {
+			return;
+		}
+
 		$boxes = array(
 			'edd_file_download_log' => 'normal',
 			'edd_purchase_log'      => 'normal',
@@ -198,6 +215,12 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0	 
 	 */
 	public function add_meta_boxes() {
+		add_meta_box( 'eddcf_disable_crowdfunding', __( 'Disable Crowdfunding', 'eddcf' ), array( $this->metabox_helper, 'metabox_display' ), 'download', 'normal', 'high', array( 'view' => 'metaboxes/crowdfunding-disable' ) );
+		
+		if ( $this->is_crowdfunding_disabled( $post ) ) {
+			return;
+		}
+
 		add_meta_box( 'eddcf_campaign_details', __( 'Campaign Details', 'eddcf' ), array( $this->metabox_helper, 'metabox_display' ), 'download', 'normal', 'high', array( 'view' => 'metaboxes/campaign-details' ) );
 		add_meta_box( 'eddcf_campaign_stats', __( 'Campaign Stats', 'eddcf' ), array( $this->metabox_helper, 'metabox_display' ), 'download', 'side', 'high', array( 'view' => 'metaboxes/campaign-stats' ) );
 		
@@ -217,6 +240,14 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function meta_boxes_save( $fields ) {
+		global $post;
+
+		$fields[] = 'crowdfunding_disabled';
+		
+		if ( $this->is_crowdfunding_disabled( $post ) ) {
+			return $fields;
+		}
+
 		$fields[] = 'campaign_goal';
 		$fields[] = 'campaign_contact_email';
 		$fields[] = 'campaign_end_date';
@@ -230,6 +261,24 @@ class EDDCF_Admin_Campaign_Post_Type {
 	}
 
 	/**
+	 * Validate and save the crowdfunding disabled setting.
+	 *
+	 * @global 	WP_Post 	$post
+	 * @return 	boolean
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function save_crowdfunding_disabled() {
+		global $post;
+
+		if ( isset( $_POST['crowdfunding_disabled'] ) && 'on' == $_POST['crowdfunding_disabled'] ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Validate and save the expiry date of the campaign. 
 	 *
 	 * @global 	WP_POST 	$post
@@ -238,7 +287,7 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function save_end_date() {
-		global $post; 
+		global $post;
 
 		if ( ! isset( $_POST[ 'campaign_end_aa' ] ) ) {
 			if ( 0 == $_POST[ 'campaign_endless' ] ) {
@@ -288,6 +337,7 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function save_rewards( $prices ) {
+
 		$norewards = isset ( $_POST[ 'campaign_norewards' ] ) ? true : false;
 
 		if ( $norewards ) {
@@ -336,7 +386,11 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @access  public
 	 * @since 	1.0.0
 	 */
-	public function price_options_heading() {
+	public function price_options_heading( $heading ) {
+		if ( $this->is_crowdfunding_disabled( $post ) ) {
+			return $heading;
+		}
+
 		return __( 'Reward Options:', 'eddcf' );
 	}
 
@@ -348,6 +402,10 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function variable_pricing_toggle_text() {
+		if ( $this->is_crowdfunding_disabled( $post ) ) {
+			return $heading;
+		}
+
 		return __( 'Enable multiple reward options', 'eddcf' );
 	}
 
@@ -359,6 +417,10 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function norewards_field() {
+		if ( $this->is_crowdfunding_disabled( $post ) ) {
+			return;
+		}
+
 		eddcf_admin_view('metaboxes/campaign-rewards/norewards');
 	}
 
@@ -370,6 +432,9 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function reward_limit_head() {
+		if ( $this->is_crowdfunding_disabled() ) {
+			return;
+		}
 		?>
 		<th id="campaign_reward_limit"><?php _e( 'Limit', 'eddcf' ); ?></th>
 		<th id="campaign_reward_backers"><?php _e( 'Backers', 'eddcf' ); ?></th>
@@ -387,6 +452,9 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function reward_limit_column( $post_id, $key, $args ) {
+		if ( $this->is_crowdfunding_disabled() ) {
+			return;
+		}
 		?>
 		<td>
 			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][limit]" id="edd_variable_prices[<?php echo $key; ?>][limit]" value="<?php echo isset ( $args[ 'limit' ] ) ? $args[ 'limit' ] : null; ?>" style="width:100%" placeholder="0" />
@@ -407,6 +475,10 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function reward_row_args( $args, $value ) {
+		if ( $this->is_crowdfunding_disabled() ) {
+			return;
+		}
+
 		if ( isset( $value['limit'] ) ) {
 			$args['limit'] = $value['limit'];
 		}

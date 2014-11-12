@@ -129,6 +129,7 @@ class EDDCF_Templates {
 	 */
 	private function is_widget( $wp_query ) {
 		return ( isset ( $wp_query->query_vars[ 'widget' ] ) &&
+			! eddcf_crowdfunding_disabled( $wp_query->queried_object ) &&
 			is_singular( 'download' ) &&
 		 	eddcf_theme_supports( 'campaign-widget' ) );
 	}
@@ -143,6 +144,7 @@ class EDDCF_Templates {
 	 */
 	private function is_campaign( $wp_query ) {
 		return is_singular( 'download' ) && 
+			! eddcf_crowdfunding_disabled( $wp_query->queried_object ) && 
 			( ! eddcf_theme_supports( 'campaign-widget' ) || ! isset( $wp_query->query_vars['widget'] ) );
 	}
 
@@ -170,7 +172,7 @@ class EDDCF_Templates {
 	public function campaign_content( $content ) {
 		global $post;
 
-		if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() && !post_password_required() ) {
+		if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() && !post_password_required() && ! eddcf_crowdfunding_disabled( $post ) ) {
 			ob_start();
 				
 			eddcf_get_template( 'content-campaign.php' );
@@ -189,7 +191,9 @@ class EDDCF_Templates {
 	 * @since 	1.0.0
 	 */
 	public function campaign_details() {
-		eddcf_get_template( 'campaign-details.php' );
+		if ( ! eddcf_crowdfunding_disabled( $post ) ) {
+			eddcf_get_template( 'campaign-details.php' );
+		}
 	}
 
 	/**

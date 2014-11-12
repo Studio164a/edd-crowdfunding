@@ -18,7 +18,11 @@ $campaign = eddcf_get_campaign();
 	/**
 	 * @hook eddcf_campaign_pledge_options
 	 */
-	do_action( 'eddcf_campaign_pledge_options' );
+	if ( $campaign->is_crowdfunding_campaign() ) : 
+
+		do_action( 'eddcf_campaign_pledge_options' );
+
+	endif;
 
 	/**
 	 * @hook edd_after_price_options

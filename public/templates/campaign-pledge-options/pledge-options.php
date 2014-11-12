@@ -10,8 +10,14 @@ global $edd_options;
 	
 $campaign = eddcf_get_campaign();
 
+if ( false === $campaign->is_crowdfunding_campaign() ) {
+	return;
+}
+
 $prices = edd_get_variable_prices( $campaign->ID );
 $type   = edd_single_price_option_mode( $campaign->ID ) ? 'checkbox' : 'radio';
+
+echo '<pre>'; print_r( $prices ); echo '</pre>';
 
 if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) : ?>
 	

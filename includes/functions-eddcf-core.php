@@ -36,6 +36,20 @@ function eddcf_get_campaign( $campaign_id = "" ) {
 } 
 
 /**
+ * Verifies whether the given download uses crowdfunding. If not, it's a standard downloadable product.
+ *
+ * @param 	WP_Post	$post
+ * @return 	boolean
+ * @since 	1.0.0
+ */
+function eddcf_crowdfunding_disabled( $post = false ) {
+	if ( false == $post ) {
+		global $post;
+	}
+	return get_post_meta( $post->ID, 'crowdfunding_disabled', true );
+}
+
+/**
  * Returns whether the current theme supports a specific aspect of the functionality. 
  *
  * @param 	string 		$feature 	The name of the feature to check.

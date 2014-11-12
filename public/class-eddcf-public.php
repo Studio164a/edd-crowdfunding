@@ -96,7 +96,8 @@ final class EDDCF_Public {
 	 * @since 	1.0.0
 	 */
 	public function frontend_scripts() {
-		$is_campaign = is_singular( 'download' ) || did_action( 'eddcf_found_single' ) || apply_filters( 'eddcf_is_campaign_page', false );	
+		$is_campaign = ! eddcf_crowdfunding_disabled() && 
+			( is_singular( 'download' ) || did_action( 'eddcf_found_single' ) || apply_filters( 'eddcf_is_campaign_page', false ) );	
 
 		if ( ! $is_campaign ) {
 			return;

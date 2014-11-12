@@ -18,7 +18,11 @@ do_action( 'edd_before_download_content', $post->ID );
 /**
  * @hook eddcf_campaign_details
  */
-do_action( 'eddcf_campaign_details' );
+if ( $campaign->is_crowdfunding_campaign() ) : 
+
+	do_action( 'eddcf_campaign_details' );
+
+endif;
 
 the_content();
 
