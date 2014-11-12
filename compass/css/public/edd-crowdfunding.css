@@ -27,4 +27,4 @@
 .currency-right #eddcf_custom_price { float: left; max-width: 80%; }
 .currency-right .currency { margin-left: 0; }
 
-.edd_purchase_submit_wrapper { float: left; width: 100%; padding-left: 3em; }
+.edd_purchase_submit_wrapper { float: left; width: 100%; padding: 2em 0 2em 3em; }
