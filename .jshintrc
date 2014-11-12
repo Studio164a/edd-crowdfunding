@@ -1,0 +1,11 @@
+{
+  "curly"	: true,
+  "eqeqeq"	: true, 
+  "undef"	: true, 
+  "globals" : {
+  	"jQuery"	: false, 
+  	"window"	: false, 
+  	"document"	: false, 
+  	"console"	: false
+  }
+}

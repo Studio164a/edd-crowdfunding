@@ -230,7 +230,7 @@ class EDDCF_Campaign {
 
 			$pledges_args = apply_filters( 'eddcf_campaign_pledges_args', array(
 				'post_parent'    => $this->ID,
-				'log_type'       => eddcf_has_preapproval_gateway() ? 'preapproval' : 'sale',
+				'log_type'       => eddcf_gateways()->has_preapproval_gateway() ? 'preapproval' : 'sale',
 				'post_status'    => array( 'publish' ),
 				'posts_per_page' => -1
 			) );
@@ -258,17 +258,20 @@ class EDDCF_Campaign {
 	public function backers() {
 		if ( ! isset( $this->campaign_backers ) ) {
 			$this->campaign_backers = array();
+			$pledges = $this->pledges();
 
-			foreach ( $this->pledges() as $pledge ) {
-				$payment_id = get_post_meta( $pledge->ID, '_edd_log_payment_id', true );
+			if ( count( $pledges ) ) {
+				foreach ( $this->pledges() as $pledge ) {
+					$payment_id = get_post_meta( $pledge->ID, '_edd_log_payment_id', true );
 
-				if ( in_array( $payment_id, $this->campaign_backers ) ) {
-					continue;
-				}
-				else {
-					$this->campaign_backers[] = array( $payment_id );
-				}
-			}	
+					if ( in_array( $payment_id, $this->campaign_backers ) ) {
+						continue;
+					}
+					else {
+						$this->campaign_backers[] = array( $payment_id );
+					}
+				}	
+			}			
 		}
 
 		return $this->campaign_backers;
@@ -299,12 +302,12 @@ class EDDCF_Campaign {
 	/**
 	 * Returns the amount of time remaining in the campaign.
 	 *
-	 * @param 	string $format 		Either 'seconds', 'hours' or 'days'.
+	 * @param 	string $format 		Either 'seconds', 'hours', 'minutes' or 'days'.
 	 * @return 	int 
 	 * @access  public
 	 * @since 	1.0.0
 	 */
-	public function time_remaining( $format = 'seconds' ) {
+	public function get_time_remaining( $format = 'seconds' ) {
 		$now     = current_time( 'timestamp' );
 		$expires = strtotime( $this->end_date(), $now );
 
@@ -325,6 +328,11 @@ class EDDCF_Campaign {
 				$remaining = $seconds / $hour_in_seconds;
 				break;
 
+			case 'minutes' : 
+				$minutes_in_seconds = 60;
+				$remaining = $seconds / $minutes_in_seconds;
+				break;
+
 			default: 
 				$remaining = $seconds;
 		}
@@ -332,6 +340,54 @@ class EDDCF_Campaign {
 		$remaining = floor( $remaining );
 
 		return apply_filters( 'eddcf_campaign_time_remaining', $remaining, $format, $this );
+	}
+
+	/**
+	 * Returns the amount of time left in the campaign as a formatted string. 
+	 *
+	 * @return 	string
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function time_remaining() {
+		$unit = false;
+		$count = 0;
+
+		// Endless campaign.
+		if ( $this->is_endless() ) {
+			$time_left = apply_filters( 'eddcf_endless_campaign_time_left', _( 'Campaign has no end', 'eddcf' ) );
+		}
+
+		// Campaign is no longer active.
+		if ( ! $this->is_active() ) {
+			$time_left = apply_filters( 'eddcf_inactive_campaign_time_left', __( 'Campaign has finished', 'eddcf' ) );
+		}
+
+		// Try to display as days left.
+		$days = $this->get_time_remaining( 'days' );
+		if ( 0 < $days ) {
+			$unit = 'days';
+			$count = $days;
+			$time_left = sprintf( __( '%s days left', 'eddcf' ), '<span class="time-left">' . $days . '</span>' );
+		}
+		else {
+			// Less than a day left, so show hours left.
+			$hours = $this->get_time_remaining( 'hours' );
+
+			if ( 0 < $hours ) {
+				$unit = 'hours';
+				$count = $hours;
+				$time_left = sprintf( __( '%s hours left', 'eddcf' ), '<span class="time-left">' . $hours . '</span>' );
+			}
+			else {
+				// Less than an hour left, so show minutes left.
+				$unit = 'minutes';
+				$count = $this->get_time_remaining( 'minutes' );
+				$time_left = sprintf( __( '%s minutes left', 'eddcf' ), '<span class="time-left">' . $count . '</span>' );
+			}
+		}		
+		
+		return apply_filters( 'eddcf_campaign_time_left', $time_left, $count, $unit, $this );
 	}
 
 	/**
@@ -432,7 +488,7 @@ class EDDCF_Campaign {
 		$active  = true;
 
 		// If any of the following conditions is true, the campaign is no longer active.
-		if ( 0 === $this->time_remaining() ) {
+		if ( 0 === $this->get_time_remaining() ) {
 			$active = false;
 		}
 		elseif ( $this->__get( '_campaign_expired' ) ) {

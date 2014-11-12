@@ -101,9 +101,9 @@ module.exports = function(grunt) {
                             '!public/assets/compass/**', 
                             '!public/assets/scss', 
                             '!public/assets/scss/**', 
-                            'charitable.php'                                
+                            'edd-crowdfunding.php'                                
                         ], 
-                        dest: '../../plugins/charitable'
+                        dest: '../../plugins/edd-crowdfunding'
                     }
                 ], 
                 verbose: true, 
@@ -158,8 +158,8 @@ module.exports = function(grunt) {
                 options: {
                     cwd: '',                        // Directory of files to internationalize.
                     domainPath: '/languages',       // Where to save the POT file.                    
-                    mainFile: 'eddcf.php',     // Main project file.
-                    potFilename: 'eddcf.pot',  // Name of the POT file.
+                    mainFile: 'eddcf.php',          // Main project file.
+                    potFilename: 'eddcf.pot',       // Name of the POT file.
                     type: 'wp-plugin',              // Type of project (wp-plugin or wp-theme).
                     updateTimestamp: true           // Whether the POT-Creation-Date should be updated without other changes.
                 }
@@ -171,5 +171,5 @@ module.exports = function(grunt) {
     // register task
     // grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.registerTask('default', ['watch']);
-    grunt.registerTask('build', ['jshint', 'uglify', 'makepot']);
+    grunt.registerTask('build', ['sync:sync_public_css', 'sync:dist', 'jshint', 'uglify', 'makepot']);
 };

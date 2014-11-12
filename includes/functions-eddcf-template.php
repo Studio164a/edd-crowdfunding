@@ -56,7 +56,6 @@ if ( ! function_exists( 'eddcf_get_pledge_amount_text' ) ) :
 
 endif;
 
-
 /**
  * Get currency symbol. 
  * 

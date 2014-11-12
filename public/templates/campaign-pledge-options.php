@@ -8,7 +8,7 @@
 
 $campaign = eddcf_get_campaign();
 ?>
-<div class="campaign-pledge-options">
+<div id="pledge" class="campaign-pledge-options">
 <?php
 	/**
 	 * @hook edd_before_price_options

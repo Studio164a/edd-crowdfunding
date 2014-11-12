@@ -1,0 +1,1005 @@
+# Copyright (C) 2014 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/eddcf\n"
+"POT-Creation-Date: 2014-11-11 23:54:31+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: grunt-wp-i18n 0.4.9\n"
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:117
+#: legacy/includes/class-campaigns.php:148
+#: legacy/includes/shortcode-profile.php:80
+msgid "Name"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:118
+#: legacy/includes/class-campaigns.php:149
+msgid "Type"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:119
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:322
+#: legacy/includes/class-campaigns.php:150
+#: legacy/includes/class-campaigns.php:354
+msgid "Backers"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:120
+#: legacy/includes/class-campaigns.php:151
+msgid "Amount Funded"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:121
+#: legacy/includes/class-campaigns.php:152
+msgid "Days Remaining"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:198
+msgid "Campaign Details"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:199
+#: legacy/includes/class-campaigns.php:226
+msgid "Campaign Stats"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:202
+#: legacy/includes/class-campaigns.php:230
+msgid "Campaign Video"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:269
+#: legacy/includes/class-campaigns.php:334
+msgid "Whoops, the provided date is invalid."
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:287
+#: legacy/includes/class-campaign.php:482
+msgid "Reward Options:"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:298
+#: legacy/includes/class-campaign.php:494
+msgid "Enable multiple reward options"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:321
+#: legacy/includes/class-campaigns.php:353
+#: legacy/includes/shortcode-submit.php:1181
+msgid "Limit"
+msgstr ""
+
+#: admin/includes/functions-eddcf-admin.php:30
+msgid "Error"
+msgstr ""
+
+#: admin/includes/functions-eddcf-admin.php:31
+msgid "View not found or is not readable."
+msgstr ""
+
+#: admin/views/metaboxes/campaign-details.php:20
+msgid "Campaign Goal"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-details.php:29
+#: legacy/includes/class-campaigns.php:526
+msgid "Funding Type:"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-details.php:37
+#: legacy/includes/class-campaigns.php:545
+msgid "Location:"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-details.php:41
+#: legacy/includes/class-campaigns.php:550
+msgid "Author:"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-details.php:45
+#: legacy/includes/class-campaigns.php:555
+msgid "Contact Email:"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-details.php:49
+#: legacy/includes/class-campaigns.php:562
+msgid "End Date:"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-details.php:66
+#: legacy/includes/class-campaigns.php:582
+msgid "This %s never ends"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-rewards/norewards.php:9
+#: legacy/includes/class-campaigns.php:596
+msgid "This %s is donations only (no rewards)"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-stats.php:7
+#: legacy/includes/class-campaigns.php:408
+msgid "Current Amount:"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-stats.php:11
+#: legacy/includes/class-campaigns.php:413
+msgid "Backers:"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-stats.php:16
+#: legacy/includes/class-campaigns.php:420
+msgid "Days Remaining:"
+msgstr ""
+
+#: admin/views/metaboxes/campaign-video.php:9
+#: legacy/includes/class-campaigns.php:445
+msgid "oEmbed supported video links."
+msgstr ""
+
+#: edd-crowdfunding.php:315 edd-crowdfunding.php:326
+msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:93
+#: includes/class-eddcf-campaign-post-type.php:105
+#: legacy/includes/class-campaigns.php:76
+#: legacy/includes/class-campaigns.php:88
+msgid "Campaigns"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:94
+#: legacy/includes/class-campaigns.php:77
+msgid "Campaign"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:95
+#: legacy/includes/class-campaigns.php:78
+msgid "Add New"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:96
+#: legacy/includes/class-campaigns.php:79
+msgid "Add New Campaign"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:97
+#: legacy/includes/class-campaigns.php:80
+msgid "Edit Campaign"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:98
+#: legacy/includes/class-campaigns.php:81
+msgid "New Campaign"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:99
+#: legacy/includes/class-campaigns.php:82
+msgid "All Campaigns"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:100
+#: legacy/includes/class-campaigns.php:83
+msgid "View Campaign"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:101
+#: legacy/includes/class-campaigns.php:84
+msgid "Search Campaigns"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:102
+#: legacy/includes/class-campaigns.php:85
+msgid "No Campaigns found"
+msgstr ""
+
+#: includes/class-eddcf-campaign-post-type.php:103
+#: legacy/includes/class-campaigns.php:86
+msgid "No Campaigns found in Trash"
+msgstr ""
+
+#: includes/class-eddcf-campaign-types.php:69
+#: legacy/includes/class-campaign.php:505
+msgid "All-or-nothing"
+msgstr ""
+
+#: includes/class-eddcf-campaign-types.php:70
+#: legacy/includes/class-campaign.php:506
+msgid "Only collect pledged funds when the campaign ends if the set goal is met."
+msgstr ""
+
+#: includes/class-eddcf-campaign-types.php:73
+#: legacy/includes/class-campaign.php:509
+msgid "Flexible"
+msgstr ""
+
+#: includes/class-eddcf-campaign-types.php:74
+#: legacy/includes/class-campaign.php:510
+msgid "Collect funds pledged at the end of the campaign no matter what."
+msgstr ""
+
+#: includes/class-eddcf-campaign-types.php:77
+msgid "Donations"
+msgstr ""
+
+#: includes/class-eddcf-campaign-types.php:78
+msgid "Funds are collected automatically when the pledge is made."
+msgstr ""
+
+#: includes/class-extension-activation.php:45
+msgid "This plugin"
+msgstr ""
+
+#: includes/class-extension-activation.php:78
+msgid " requires Easy Digital Downloads! Please activate it to continue!"
+msgstr ""
+
+#: includes/class-extension-activation.php:80
+msgid " requires Easy Digital Downloads! Please install it to continue!"
+msgstr ""
+
+#: includes/functions-eddcf-template.php:32
+#: legacy/includes/class-export-campaigns.php:37
+#: legacy/includes/theme-stuff.php:146
+msgid "Pledge"
+msgstr ""
+
+#: legacy/appthemer-crowdfunding.php:217
+msgid ""
+"<strong>Notice:</strong> Crowdfunding by Astoundify requires <a "
+"href=\"%s\">Easy Digital Downloads</a> in order to function properly."
+msgstr ""
+
+#: legacy/appthemer-crowdfunding.php:330
+msgid "At least one reward is required."
+msgstr ""
+
+#: legacy/includes/checkout.php:76
+msgid "Hide name on backers list?"
+msgstr ""
+
+#: legacy/includes/class-campaign.php:517
+#: legacy/includes/class-campaigns.php:647
+#: legacy/includes/shortcode-submit.php:521
+msgid "Donation"
+msgstr ""
+
+#: legacy/includes/class-campaign.php:518
+msgid "Funds will be collected automatically as pledged."
+msgstr ""
+
+#: legacy/includes/class-campaigns.php:227
+msgid "Campaign Updates"
+msgstr ""
+
+#: legacy/includes/class-campaigns.php:465
+msgid "Notes and updates about the campaign."
+msgstr ""
+
+#: legacy/includes/class-campaigns.php:514
+msgid "Featured campaign"
+msgstr ""
+
+#: legacy/includes/class-campaigns.php:521
+msgid "Collect shipping information on checkout"
+msgstr ""
+
+#: legacy/includes/class-campaigns.php:536
+msgid "Goal:"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:32
+msgid "ID"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:33
+msgid "Email"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:34
+msgid "First Name"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:35
+msgid "Last Name"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:36
+#: legacy/includes/shipping.php:70 legacy/includes/shipping.php:73
+msgid "Shipping Address"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:38
+msgid "Amount"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:39
+msgid "Tax"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:40
+msgid "Payment Method"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:41
+msgid "Purchase Key"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:42
+msgid "Date"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:43
+msgid "User"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:44
+msgid "Status"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:122
+msgid "none"
+msgstr ""
+
+#: legacy/includes/class-export-campaigns.php:126
+msgid "guest"
+msgstr ""
+
+#: legacy/includes/class-processing.php:150
+#: legacy/includes/class-processing.php:158
+msgid "Campaign Funds"
+msgstr ""
+
+#: legacy/includes/class-processing.php:161
+msgid "Failed Payments"
+msgstr ""
+
+#: legacy/includes/class-processing.php:165
+msgid "This campaign is currently being processed."
+msgstr ""
+
+#: legacy/includes/class-processing.php:176
+msgid ""
+"<strong>There are currently unprocessed for this campaign.</strong> If "
+"there are more than %d, you will have to process multiple batches."
+msgstr ""
+
+#: legacy/includes/class-processing.php:179
+msgid "Once processed, this campaign will automatically be closed."
+msgstr ""
+
+#: legacy/includes/class-processing.php:182
+msgid "Collect Payments"
+msgstr ""
+
+#: legacy/includes/class-processing.php:200
+msgid "%d payment failed to process."
+msgid_plural "%d payments failed to process."
+msgstr[0] ""
+msgstr[1] ""
+
+#: legacy/includes/class-processing.php:200
+msgid "View gateway errors"
+msgstr ""
+
+#: legacy/includes/class-processing.php:217
+msgid "Retry Failed Funds"
+msgstr ""
+
+#: legacy/includes/class-processing.php:265
+msgid ""
+"Payments have attempted to be processed. Any errors will appear on this "
+"page."
+msgstr ""
+
+#: legacy/includes/class-processing.php:266
+msgid "You do not have permission to collect funds for %s."
+msgstr ""
+
+#: legacy/includes/class-processing.php:491
+msgid ""
+"Error processing preapproved payment via %s when automatically collecting "
+"funds."
+msgstr ""
+
+#: legacy/includes/class-roles.php:24
+msgid "Campaign Contributor"
+msgstr ""
+
+#: legacy/includes/emails.php:76
+msgid "Your pledge has been received"
+msgstr ""
+
+#: legacy/includes/emails.php:119
+msgid "Dear {name}"
+msgstr ""
+
+#: legacy/includes/emails.php:120
+msgid ""
+"Thank you for your pledging to support %1$s. This email is just to let you "
+"know your pledge was processed without a hitch! You will only be charged "
+"your pledge amount if the %2$s receives 100% funding."
+msgstr ""
+
+#: legacy/includes/emails.php:145
+msgid "Dear Author"
+msgstr ""
+
+#: legacy/includes/emails.php:146
+msgid ""
+"We would just like to let you know that your campaign has reached its end "
+"date. You can view your campaign by clicking <a href=\"%s\">here</a>."
+msgstr ""
+
+#: legacy/includes/emails.php:155
+msgid "Your campaign is complete!"
+msgstr ""
+
+#: legacy/includes/export.php:60
+msgid "Export Campaign Data"
+msgstr ""
+
+#: legacy/includes/export.php:62
+msgid "Download a CSV of all pledges recorded."
+msgstr ""
+
+#: legacy/includes/export.php:66
+msgid "Select %s"
+msgstr ""
+
+#: legacy/includes/export.php:82
+msgid "Generate CSV"
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:38
+msgid ""
+"<strong>Note:</strong> Please upgrade your PayPal Adaptive Payments "
+"extension before collecting funds."
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:50
+msgid "PayPal Email"
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:81
+msgid "PayPal Adaptive Payments Email:"
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:116
+msgid "Additional Flexible Fee"
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:117
+msgid ""
+"%. <span class=\"description\">If a campaign is flexible, increase "
+"commission by this percent.</span>"
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:124
+msgid "Maximum Pledge Amount"
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:125
+msgid "The maximum amount of money PayPal can accept on your account."
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:132
+msgid "Maximum Campaigns Per Year"
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:133
+msgid "The maximum amount of campaigns that each user may create per year."
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:140
+msgid "Maximum Payments Per User"
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:141
+msgid "The maximum times a user can contribtue to a single campaign."
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:228
+msgid "You have reached the maximum number of pledges-per-campaign allowed."
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:292
+msgid "You have submitted the maximum number of campaigns allowed for this year."
+msgstr ""
+
+#: legacy/includes/gateways/paypal_adaptive_payments.php:314
+msgid "<strong>Note:</strong> There is a %s maximum allowed per reward level."
+msgstr ""
+
+#: legacy/includes/settings.php:42
+msgid "FAQ Page"
+msgstr ""
+
+#: legacy/includes/settings.php:43
+msgid "A page with general information about your site. Fees, etc."
+msgstr ""
+
+#: legacy/includes/settings.php:50
+msgid "Submit Page"
+msgstr ""
+
+#: legacy/includes/settings.php:51
+msgid ""
+"The page that contains the <code>[appthemer_crowdfunding_submit]</code> "
+"shortcode."
+msgstr ""
+
+#: legacy/includes/settings.php:58
+msgid "Submit Success Page"
+msgstr ""
+
+#: legacy/includes/settings.php:59
+msgid "The page that users are redirected to after a success campaign subimssion."
+msgstr ""
+
+#: legacy/includes/settings.php:66
+msgid "Profile Page"
+msgstr ""
+
+#: legacy/includes/settings.php:67
+msgid ""
+"The page that contains the <code>[appthemer_crowdfunding_profile]</code> "
+"shortcode."
+msgstr ""
+
+#: legacy/includes/settings.php:74
+msgid "Login Page"
+msgstr ""
+
+#: legacy/includes/settings.php:75
+msgid ""
+"The page that contains the <code>[appthemer_crowdfunding_login]</code> "
+"shortcode."
+msgstr ""
+
+#: legacy/includes/settings.php:82
+msgid "Register Page"
+msgstr ""
+
+#: legacy/includes/settings.php:83
+msgid ""
+"The page that contains the <code>[appthemer_crowdfunding_register]</code> "
+"shortcode."
+msgstr ""
+
+#: legacy/includes/settings.php:103
+msgid "Astoundify Crowdfunding Settings"
+msgstr ""
+
+#: legacy/includes/settings.php:104
+msgid "Configuration related to crowdfunding."
+msgstr ""
+
+#: legacy/includes/settings.php:110
+msgid "Automatically Start Payment Processing"
+msgstr ""
+
+#: legacy/includes/settings.php:111
+msgid ""
+"When a campaign is complete and meets the criteria, payments will "
+"automatically start processing."
+msgstr ""
+
+#: legacy/includes/settings.php:118
+msgid "Batch Process"
+msgstr ""
+
+#: legacy/includes/settings.php:119
+msgid "The number of payments per campaign to process each hour."
+msgstr ""
+
+#: legacy/includes/settings.php:127
+msgid "Custom Pledging"
+msgstr ""
+
+#: legacy/includes/settings.php:128
+msgid "Allow arbitrary amounts to be pledged."
+msgstr ""
+
+#: legacy/includes/settings.php:135
+msgid "Minimum Campaign Length"
+msgstr ""
+
+#: legacy/includes/settings.php:136
+msgid "The minimum days a campaign can run for."
+msgstr ""
+
+#: legacy/includes/settings.php:144
+msgid "Maximum Campaign Length"
+msgstr ""
+
+#: legacy/includes/settings.php:145
+msgid "The maximum days a campaign can run for."
+msgstr ""
+
+#: legacy/includes/settings.php:160
+msgid "Campaign Types"
+msgstr ""
+
+#: legacy/includes/settings.php:161
+msgid "Select which campaign types are allowed."
+msgstr ""
+
+#: legacy/includes/settings.php:168
+msgid "Require Account"
+msgstr ""
+
+#: legacy/includes/settings.php:169
+msgid "Require users to be logged in to submit a campaign."
+msgstr ""
+
+#: legacy/includes/shipping.php:74
+msgid "Where should we send any physical goods?"
+msgstr ""
+
+#: legacy/includes/shipping.php:75
+msgid "Address line 1"
+msgstr ""
+
+#: legacy/includes/shipping.php:79
+msgid "Shipping Address Line 2"
+msgstr ""
+
+#: legacy/includes/shipping.php:80
+msgid "Address line 2"
+msgstr ""
+
+#: legacy/includes/shipping.php:84
+msgid "Shipping City"
+msgstr ""
+
+#: legacy/includes/shipping.php:85
+msgid "City"
+msgstr ""
+
+#: legacy/includes/shipping.php:89
+msgid "Shipping Country"
+msgstr ""
+
+#: legacy/includes/shipping.php:101
+msgid "Shipping State / Province"
+msgstr ""
+
+#: legacy/includes/shipping.php:102
+msgid "State / Province"
+msgstr ""
+
+#: legacy/includes/shipping.php:121
+msgid "Shipping Zip / Postal Code"
+msgstr ""
+
+#: legacy/includes/shipping.php:122
+msgid "Zip / Postal code"
+msgstr ""
+
+#: legacy/includes/shipping.php:175
+msgid "Please fill out all required shipping fields."
+msgstr ""
+
+#: legacy/includes/shipping.php:179
+msgid "The zip code you entered for your shipping address is invalid."
+msgstr ""
+
+#: legacy/includes/shortcode-login.php:68
+msgid "Forgot Password"
+msgstr ""
+
+#: legacy/includes/shortcode-login.php:72
+#: legacy/includes/shortcode-register.php:70
+msgid "Register"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:53
+msgid "Profile Information"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:60
+msgid "Update"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:97
+msgid "Website/URL"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:117
+msgid "%s URL"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:135
+msgid "Biography"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:160
+msgid "Your Campaigns"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:175
+msgid "This campaign is awaiting review."
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:179
+msgid ""
+"This campaign is a draft. <a href=\"%s\">Finish editing</a> it and submit "
+"it for review."
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:185
+msgid "Permalink to %s"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:185
+msgid "View"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:186
+msgid "Edit %s"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:186
+msgid "Edit"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:192
+msgid "Export data for %s"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:192
+msgid "Export Data"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:226
+msgid "Your Contributions"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:329
+msgid "You are not the author of this campaign, and cannot request the data."
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:365
+msgid "Success! We have been notified of your request."
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:367
+msgid "Success! Your download should begin shortly."
+msgstr ""
+
+#: legacy/includes/shortcode-register.php:50
+msgid "Your Name"
+msgstr ""
+
+#: legacy/includes/shortcode-register.php:55
+msgid "Email Address"
+msgstr ""
+
+#: legacy/includes/shortcode-register.php:60
+msgid "Username"
+msgstr ""
+
+#: legacy/includes/shortcode-register.php:65
+msgid "Password"
+msgstr ""
+
+#: legacy/includes/shortcode-register.php:106
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: legacy/includes/shortcode-register.php:109
+msgid "That contact email address already exists."
+msgstr ""
+
+#: legacy/includes/shortcode-register.php:113
+msgid "Please choose a secure password."
+msgstr ""
+
+#: legacy/includes/shortcode-register.php:117
+msgid "Sorry, this username is already taken."
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:146
+msgid "Campaign Information"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:153
+msgid "Title"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:162
+msgid "Goal (%s)"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:171
+msgid "Length"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:182
+msgid "Funding Type"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:192
+msgid "Categories"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:200
+msgid "Tags"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:208
+msgid "Description"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:217
+msgid "Updates"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:225
+msgid "Excerpt"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:233
+msgid "Featured Image"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:241
+msgid "Featured Video URL"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:249
+msgid "Backer Rewards"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:256
+msgid "Collect shipping information on checkout."
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:264
+msgid "No rewards, donations only."
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:280
+msgid "Your Information"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:287
+msgid "Contact Email"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:296
+msgid "Name/Organization"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:304
+msgid "Location"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:765
+msgid "Save and Preview"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:801
+msgid "Agree to Terms?"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:836
+msgid "Show Terms"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:837
+msgid "Hide Terms"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:878
+msgid "No End Date"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:1171
+msgid "Amount (%s)"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:1176
+msgid "Reward"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:1198
+msgid "+ <em>Add Reward</em>"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:1242
+msgid "The <strong>%s</strong> field is required."
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:1400
+msgid ""
+"<strong>Note</strong>: You are currently logged in as %1$s. This %2$s will "
+"be associated with that account. Please <a href=\"%3$s\">log out</a> if you "
+"would like to make a %2$s under a new account."
+msgstr ""
+
+#: legacy/includes/theme-stuff.php:150
+msgid "1 Backer"
+msgid_plural "%1$s Backers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: legacy/includes/theme-stuff.php:154
+msgid "Limit of %d &mdash; %d remaining"
+msgstr ""
+
+#: legacy/includes/theme-stuff.php:156
+msgid "All gone!"
+msgstr ""
+
+#: legacy/includes/theme-stuff.php:180
+msgid "Enter your pledge amount"
+msgstr ""
+
+#: legacy/includes/theme-stuff.php:239
+msgid ""
+"<strong>Funding Unsuccessful</strong>. This project reached the deadline "
+"without achieving its funding goal on %s."
+msgstr ""
+
+#: legacy/includes/theme-stuff.php:243
+msgid ""
+"<strong>Funding Successful</strong>. This project reached its goal before "
+"%s."
+msgstr ""
+
+#: legacy/includes/theme-stuff.php:251
+msgid ""
+"<strong>Campaign Complete</strong>. This project has ended on %s. No more "
+"contributions can be made."
+msgstr ""
+
+#: legacy/includes/theme-stuff.php:268
+msgid "This is a preview of your %1$s. <a href=\"%2$s\">Edit</a>"
+msgstr ""
+
+#: public/templates/campaign-pledge-options/pledge-options.php:42
+msgid "Unlimited backers"
+msgstr ""
+
+#: public/templates/campaign-pledge-options/pledge-options.php:57
+msgid "%d of %d remaining"
+msgstr ""
+
+#: admin/includes/class-eddcf-admin-campaign-post-type.php:143
+#: legacy/includes/class-campaigns.php:171
+msgctxt "funded of goal"
+msgid "%s of %s"
+msgstr ""
+
+#: includes/class-eddcf-gateways.php:95
+msgctxt "function called incorrectly"
+msgid "%s incorrectly called before %s hook."
+msgstr ""
+
+#: legacy/includes/shortcode-login.php:71
+msgctxt "login form action divider"
+msgid "or"
+msgstr ""
+
+#: legacy/includes/shortcode-profile.php:238
+msgctxt "price for download (payment history)"
+msgid "<a href=\"%s\">%s</a> pledge to <a href=\"%s\">%s</a>"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:759
+msgctxt "edit \"campaign\""
+msgid "Update %s"
+msgstr ""
+
+#: legacy/includes/shortcode-submit.php:760
+msgctxt "submit \"campaign\""
+msgid "Submit %s"
+msgstr ""

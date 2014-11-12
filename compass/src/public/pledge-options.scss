@@ -1,5 +1,78 @@
 .campaign-pledge-options {
 	.pledge-options {
 		list-style: none;
+		margin-left: 0;
+		margin-right: 0;
 	}
+
+	.pledge-option {
+		position: relative;
+		padding-left: 3em;
+		padding-bottom: 2em;
+		margin-bottom: 2em;
+		border-bottom: 1px solid #cfcfcf;		
+	}
+
+	.pledge-option-input {
+		position: absolute;
+		left: 1em;
+		top: 0;
+	}
+
+	.pledge-title {
+		margin: 0 0 0.5em;
+	}
+
+	.pledge-limit {
+		margin-bottom: 1em;
+		font-weight: bolder;
+		font-style: italic;
+	}
+
+	.pledge-description {
+		margin-bottom: 0;
+	}
+}
+
+.campaign-price-input {
+    padding: 0 1em 2em 3em;
+    margin-bottom: 2em;
+    border-bottom: 1px solid #cfcfcf;
+
+    .pledge-title {
+    	margin-left: 0;
+    }
+}
+
+#eddcf_custom_price {
+	max-width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.currency {    
+	float: left;
+    display: inline-block;
+    padding: 1em 0;
+    margin-left: -3em;
+    width: 3em;    
+    text-align: center;
+    font-weight: lighter;    
+}
+
+.currency-right {
+	#eddcf_custom_price {
+		float: left;
+		max-width: 80%;
+	}
+
+	.currency {
+		margin-left: 0;
+	}
+}
+
+.edd_purchase_submit_wrapper {
+    float: left;
+    width: 100%;
+    padding-left: 3em;
 }

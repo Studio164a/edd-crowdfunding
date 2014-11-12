@@ -1,0 +1,44 @@
+.campaign-details {
+    @include clearfix();    
+    padding: 0 1em;
+    margin-bottom: 1em;
+    font-size: 1.1em;
+    background-color: #e6e6e6;
+
+    .percent-raised, 
+    .campaign-figures, 
+    .campaign-backers, 
+    .campaign-expiry {
+        float: left;
+        width: 50%;
+        padding: 1em 0;        
+        border-bottom: 1px solid #fff;
+    }
+
+    .percent, 
+    .amount-raised {
+        display: block;
+        font-size: 1.5em;
+        font-weight: bolder;
+    }
+
+    .campaign-backers {
+        clear: left;        
+    }
+
+    .backers-count, 
+    .time-left {
+        font-weight: bolder;
+    }
+
+    .pledge-button {
+        float: left;
+        width: 100%;
+        padding: 1em 0;
+        text-align: center;
+
+        .button {
+            display: inline-block;            
+        }
+    }
+}

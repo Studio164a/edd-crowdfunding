@@ -49,6 +49,9 @@ class EDDCF_Templates {
 		// Set up base templates for campaign widget, single campaign and archive.
 		add_filter( 'template_include', array( $this, 'template_loader' ) );
 
+		// Use our own template for displaying campaign content.
+		add_action( 'edd_before_download_content', array( $this, 'campaign_details' ) );
+
 		// Set up pledge options form.
 		remove_action( 'edd_purchase_link_top', 'edd_purchase_variable_pricing', 10 );
 		add_action( 'edd_purchase_link_top', array( $this, 'pledge_options' ), 10 );
@@ -105,6 +108,10 @@ class EDDCF_Templates {
 
 			$files = apply_filters( 'eddcf_crowdfunding_templates_archive', array( 'archive-campaigns.php', 'archive-download.php', 'archive.php' ) );
 		}
+		// Not one of our templates.
+		else {
+			return $template;
+		}
 
 		$files = apply_filters( 'eddcf_template_loader', $files );
 
@@ -149,6 +156,40 @@ class EDDCF_Templates {
 	 */
 	private function is_campaigns_archive( $wp_query ) {
 		return is_post_type_archive( 'download' ) || is_tax( array( 'download_category', 'download_tag' ) );
+	}
+
+	/**
+	 * Display campaign content. 
+	 *
+	 * @global 	WP_Post 	$post
+	 * @param 	string 		$content
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function campaign_content( $content ) {
+		global $post;
+
+		if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() && !post_password_required() ) {
+			ob_start();
+				
+			eddcf_get_template( 'content-campaign.php' );
+
+			$content = ob_get_clean();
+		}
+		
+		return $content;
+	}
+
+	/**
+	 * Display details about campaign.  
+	 *
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function campaign_details() {
+		eddcf_get_template( 'campaign-details.php' );
 	}
 
 	/**

@@ -62,8 +62,6 @@ final class EDDCF_Public {
 		$this->setup_paths();
 
 		$this->attach_hooks_and_filters();
-
-		do_action( 'eddcf_public_start', $this, $eddcf );
 	}	
 
 	/**
@@ -87,7 +85,7 @@ final class EDDCF_Public {
 	 * @since 	1.0.0
 	 */
 	private function attach_hooks_and_filters() {
-		// add_action( 'wp_enqueue_script', array( $this, 'frontend_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 	}
 
 	/**
@@ -98,10 +96,14 @@ final class EDDCF_Public {
 	 * @since 	1.0.0
 	 */
 	public function frontend_scripts() {
-		// $is_campaign   = is_singular( 'download' ) || did_action( 'atcf_found_single' ) || apply_filters( 'atcf_is_campaign_page', false );
+		$is_campaign = is_singular( 'download' ) || did_action( 'eddcf_found_single' ) || apply_filters( 'eddcf_is_campaign_page', false );	
 
-		// if ( ! $is_campaign )
-		// 	return;
+		if ( ! $is_campaign ) {
+			return;
+		}
+
+		wp_register_style( 'edd-crowdfunding', $this->public_url . 'assets/css/edd-crowdfunding.css', array(), EDD_Crowdfunding::VERSION );
+		wp_enqueue_style( 'edd-crowdfunding' );
 	}
 }
 

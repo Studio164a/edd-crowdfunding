@@ -89,6 +89,8 @@ class EDDCF_Admin_Campaign_Post_Type {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 2 );
 		add_filter( 'edd_metabox_fields_save', array( $this, 'meta_boxes_save' ) );
 		add_filter( 'edd_metabox_save_campaign_end_date', array( $this, 'save_end_date' ) );
+		remove_filter( 'edd_metabox_save_edd_variable_prices', 'edd_sanitize_variable_prices_save' );
+		add_filter( 'edd_metabox_save_edd_variable_prices', array( $this, 'save_rewards' ) );
 		remove_action( 'edd_meta_box_fields', 'edd_render_product_type_field', 10 );		
 
 		// Change the price options metabox, adding a norewards field and 
@@ -97,6 +99,7 @@ class EDDCF_Admin_Campaign_Post_Type {
 		add_action( 'edd_after_price_field', array( $this, 'norewards_field' ) );
 		add_action( 'edd_download_price_table_head', array( $this, 'reward_limit_head' ), 9 );
 		add_action( 'edd_download_price_table_row', array( $this, 'reward_limit_column' ), 9, 3 );
+		add_filter( 'edd_price_row_args', array( $this, 'reward_row_args' ), 10, 2 );
 
 		// add_action( 'wp_insert_post', array( $this, 'update_post_date_on_publish' ) );
 	}
@@ -277,6 +280,56 @@ class EDDCF_Admin_Campaign_Post_Type {
 	}
 
 	/**
+	 * Save campaign rewards/pledge options. 
+	 *
+	 * @param 	array 	$prices
+	 * @return 	array
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function save_rewards( $prices ) {
+		$norewards = isset ( $_POST[ 'campaign_norewards' ] ) ? true : false;
+
+		if ( $norewards ) {
+			// $prices = array();
+			// $prices[0] = array(
+			// );
+
+			// return $prices;
+		}
+
+		return $prices;
+	}
+
+	/**
+	 * Updates Save
+	 *
+	 * EDD trys to escape this data, and we don't want that.
+	 *
+	 * @since Astoundify Crowdfunding 0.9
+	 */
+	function atcf_save_variable_prices_norewards( $prices ) {
+		$norewards = isset ( $_POST[ 'campaign_norewards' ] ) ? true : false;
+
+		if ( ! $norewards )
+			return $prices;
+
+		if ( isset( $prices[0][ 'name' ] ) )
+			return $prices;
+
+		$prices = array();
+
+		$prices[0] = array(
+			'name'   => apply_filters( 'atcf_default_no_rewards_name', __( 'Donation', 'atcf' ) ),
+			'amount' => apply_filters( 'atcf_default_no_rewards_price', 0 ),
+			'limit'  => null,
+			'bought' => 0
+		);
+
+		return $prices;
+	}
+
+	/**
 	 * Change the heading of the price options metabox. 
 	 *
 	 * @return 	string
@@ -342,6 +395,27 @@ class EDDCF_Admin_Campaign_Post_Type {
 			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][bought]" id="edd_variable_prices[<?php echo $key; ?>][bought]" value="<?php echo isset ( $args[ 'bought' ] ) ? $args[ 'bought' ] : null; ?>" style="width:100%" placeholder="0" />
 		</td>
 		<?php
+	}
+
+	/**
+	 * Add additional arguments to reward row.  
+	 *
+	 * @param 	array 		$args
+	 * @param 	array 		$value
+	 * @return 	array
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function reward_row_args( $args, $value ) {
+		if ( isset( $value['limit'] ) ) {
+			$args['limit'] = $value['limit'];
+		}
+
+		if ( isset( $value['bought'] ) ) {
+			$args['bought'] = $value['bought'];
+		}
+
+		return $args;
 	}
 }
 

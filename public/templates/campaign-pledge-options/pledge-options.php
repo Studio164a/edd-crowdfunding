@@ -15,7 +15,7 @@ $type   = edd_single_price_option_mode( $campaign->ID ) ? 'checkbox' : 'radio';
 
 if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) : ?>
 	
-	<input type="radio" name="edd_options[price_id][]" id="edd_price_option_<?php echo $campaign->ID ?>_0" class="edd_price_option_<?php echo $campaign->ID ?> hidden" value="0" checked />
+	<input type="<?php echo $type ?>" name="edd_options[price_id][]" id="edd_price_option_<?php echo $campaign->ID ?>_0" class="edd_price_option_<?php echo $campaign->ID ?> hidden" value="0" checked />
 
 <?php
 elseif ( count( $prices )) : ?>
@@ -23,7 +23,7 @@ elseif ( count( $prices )) : ?>
 	<ul class="pledge-options">			
 
 		<?php foreach ( $prices as $i => $price ) : ?>
-
+			
 			<?php 
 				$has_limit = strlen( $price['limit'] ) > 0;
 				$remaining = $price['limit'] - $price['bought'];
@@ -34,13 +34,13 @@ elseif ( count( $prices )) : ?>
 				
 				<?php if ( ! $has_limit ) : ?>
 
-					<input type="radio" name="edd_options[price_id][]" id="edd_price_option_<?php echo $campaign->ID ?>_<?php echo $i ?>" class="edd_price_option_<?php echo $campaign->ID ?> edd_price_options_input" value="<?php echo $i ?>" />
+					<input type="<?php echo $type ?>" name="edd_options[price_id][]" id="edd_price_option_<?php echo $campaign->ID ?>_<?php echo $i ?>" class="pledge-option-input edd_price_option_<?php echo $campaign->ID ?> edd_price_options_input" value="<?php echo $i ?>" />
 					<h3 class="pledge-title"><?php 
 						echo eddcf_get_pledge_amount_text( $price['amount'] ); 
 					?></h3>
-					<span class="pledge-limit"><?php 
+					<p class="pledge-limit"><?php 
 						_e( 'Unlimited backers', 'eddcf' ); 
-					?></span>
+					?></p>
 					<p class="pledge-description"><?php 
 						echo $price['name']; 
 					?></p>
@@ -48,14 +48,14 @@ elseif ( count( $prices )) : ?>
 				<?php else : ?>
 
 					<?php if ( $remaining > 0 ) : ?>
-						<input type="radio" name="edd_options[price_id][]" id="edd_price_option_<?php echo $campaign->ID ?>_<?php echo $i ?>" class="edd_price_option_<?php echo $campaign->ID ?> edd_price_options_input" value="<?php echo $i ?>" />
+						<input type="<?php echo $type ?>" name="edd_options[price_id][]" id="edd_price_option_<?php echo $campaign->ID ?>_<?php echo $i ?>" class="pledge-option-input edd_price_option_<?php echo $campaign->ID ?> edd_price_options_input" value="<?php echo $i ?>" />
 					<?php endif ?>
 					<h3 class="pledge-title"><?php 
 						echo eddcf_get_pledge_amount_text( $price['amount'] );
 					?></h3>
-					<span class="pledge-limit"><?php 
+					<p class="pledge-limit"><?php 
 						printf( __( '%d of %d remaining', 'eddcf' ), $remaining, $price['limit'] );
-					?></span>
+					?></p>
 					<p class="pledge-description"><?php 
 						echo $price['name']; 
 					?></p>
