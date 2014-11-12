@@ -161,29 +161,6 @@ class EDDCF_Templates {
 	}
 
 	/**
-	 * Display campaign content. 
-	 *
-	 * @global 	WP_Post 	$post
-	 * @param 	string 		$content
-	 * @return 	void
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public function campaign_content( $content ) {
-		global $post;
-
-		if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() && !post_password_required() && ! eddcf_crowdfunding_disabled( $post ) ) {
-			ob_start();
-				
-			eddcf_get_template( 'content-campaign.php' );
-
-			$content = ob_get_clean();
-		}
-		
-		return $content;
-	}
-
-	/**
 	 * Display details about campaign.  
 	 *
 	 * @return 	void
@@ -191,7 +168,7 @@ class EDDCF_Templates {
 	 * @since 	1.0.0
 	 */
 	public function campaign_details() {
-		if ( ! eddcf_crowdfunding_disabled( $post ) ) {
+		if ( ! eddcf_crowdfunding_disabled() ) {
 			eddcf_get_template( 'campaign-details.php' );
 		}
 	}
@@ -211,6 +188,12 @@ class EDDCF_Templates {
 			return;
 		}
 
+		// If crowdfunding is disabled for this download, use 
+		// EDD's standard variable pricing.
+		if ( eddcf_crowdfunding_disabled( get_post( $download_id ) ) ) {
+			return edd_purchase_variable_pricing( $download_id );
+		}
+
 		eddcf_get_template( 'campaign-pledge-options.php' );
 	}
 
@@ -222,7 +205,9 @@ class EDDCF_Templates {
 	 * @since 	1.0.0
 	 */
 	public function pledge_options_list() {
-		eddcf_get_template( 'campaign-pledge-options/pledge-options.php' );
+		if ( ! eddcf_crowdfunding_disabled() ) {
+			eddcf_get_template( 'campaign-pledge-options/pledge-options.php' );
+		}
 	}
 
 	/**
@@ -234,6 +219,10 @@ class EDDCF_Templates {
 	 */
 	public function custom_pledge() {
 		global $edd_options;
+
+		if ( eddcf_crowdfunding_disabled() ) {
+			return;
+		}
 
 		//if ( isset( $edd_options[ 'atcf_settings_custom_pledge' ] ) ) {
 			eddcf_get_template( 'campaign-pledge-options/custom-pledge.php' );
