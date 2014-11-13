@@ -49,14 +49,21 @@ class EDDCF_Campaign {
 	 * @var 	array
 	 * @access 	private
 	 */
-	private $campaign_pledges;
+	private $pledges;
+
+	/**
+	 * The unique pledges made to this campaign.
+	 * @var 	array
+	 * @access 	private
+	 */
+	private $unique_pledges;
 
 	/**
 	 * The backers for this campaign.
 	 * @var 	array
 	 * @access 	private
 	 */
-	private $campaign_backers;
+	private $backers;
 
 	/**
 	 * Create class object.
@@ -225,7 +232,7 @@ class EDDCF_Campaign {
 	 * @since 	1.0.0
 	 */
 	public function pledges() {	
-		if ( ! isset( $this->campaign_pledges ) ) {
+		if ( ! isset( $this->pledges ) ) {
 			global $edd_logs; 
 
 			$pledges_args = apply_filters( 'eddcf_campaign_pledges_args', array(
@@ -236,55 +243,61 @@ class EDDCF_Campaign {
 			) );
 
 			// EDD_Logging fetches the logs (i.e. pledges) connected to this campaign.
-			$this->campaign_pledges = $edd_logs->get_connected_logs( $pledges_args );
+			$this->pledges = $edd_logs->get_connected_logs( $pledges_args );
 
-			if ( ! $this->campaign_pledges ) {
-				$this->campaign_pledges = false;
+			if ( ! $this->pledges ) {
+				$this->pledges = false;
 			}
 		}	
 
-		return $this->campaign_pledges;
+		return $this->pledges;
 	}
 
 	/**
-	 * Returns all the backers for this campaign. 
+	 * Returns all the unique transactions with pledges for this campaign. 
 	 * 
-	 * If the same backer has pledged more than once to the same campaign, they are included only once.
+	 * If a single transaction included multiple pledges to the same campaign, 
+	 * the transaction is only counted once.
 	 *
 	 * @return 	array
 	 * @access 	public
 	 * @since 	1.0.0
 	 */
-	public function backers() {
-		if ( ! isset( $this->campaign_backers ) ) {
-			$this->campaign_backers = array();
+	public function unique_pledges() {
+		if ( ! isset( $this->unique_pledges ) ) {
+			$this->unique_pledges = array();
 			$pledges = $this->pledges();
 
-			if ( count( $pledges ) ) {
-				foreach ( $this->pledges() as $pledge ) {
+			if ( is_array( $pledges ) && count( $pledges ) ) {
+				foreach ( $pledges as $pledge ) {
 					$payment_id = get_post_meta( $pledge->ID, '_edd_log_payment_id', true );
 
-					if ( in_array( $payment_id, $this->campaign_backers ) ) {
+					if ( in_array( $payment_id, $this->unique_pledges ) ) {
 						continue;
 					}
 					else {
-						$this->campaign_backers[] = array( $payment_id );
+						$this->unique_pledges[] = $payment_id;
 					}
 				}	
 			}			
 		}
 
-		return $this->campaign_backers;
+		return $this->unique_pledges;
 	}
 
 	/**
-	 * Returns the number of campaign backers. 
+	 * Returns the number of unique campaign pledges. 
+	 *
+	 * If someone pledges to a campaign with multiple separate reward choices 
+	 * (i.e. multiple variations of the same campaign), each variation is counted. 
+	 * If you want the exact number of transactions that included a pledge to 
+	 * this campaign, use unique_pledges() instead.
 	 * 
 	 * @return 	int
 	 * @access 	public
 	 * @since 	1.0.0
 	 */
-	public function backers_count() {
+	public function pledge_count() {
 		$prices = edd_get_variable_prices( $this->ID );
 		$count  = 0;
 
@@ -297,6 +310,63 @@ class EDDCF_Campaign {
 		}
 
 		return $count;
+	}
+
+	/**
+	 * Returns an array containing the user ID and email address of all unique 
+	 * campaign backers. 
+	 *
+	 * A single user may have backed the campaign multiple times, so this 
+	 * returns only the unique backers. A single user is not counted twice.
+	 *
+	 * Note that users may have made the transaction without being logged in, 
+	 * in which case the user ID is 0. 
+	 * 
+	 * @global 	WPDB 	$wpdb
+	 * @return 	int
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function backers() {
+		global $wpdb; 
+
+		if ( ! isset( $this->backers ) ) {
+
+			$unique_pledges = $this->unique_pledges();
+
+			if ( 0 == count( $unique_pledges ) ) {
+				$this->backers = array();
+			}
+			else {
+				// Escape data for SQL. 
+				$unique_pledges = esc_sql( $unique_pledges );
+
+				$pledge_ids = implode( ', ', $unique_pledges );
+
+				$sql   	 = "SELECT DISTINCT m.meta_value, p.post_author
+							FROM $wpdb->postmeta m
+							LEFT JOIN $wpdb->posts p
+							ON m.post_id = p.ID
+							WHERE m.meta_key = '_edd_payment_user_email'
+							AND m.post_id IN ( $pledge_ids )";
+
+				$this->backers = $wpdb->get_results( $sql );
+			}
+		}
+
+		return $this->backers;
+	}
+
+	/**
+	 * Returns the number of unique campaign backers. 
+	 * 
+	 * @uses 	$this->backers()
+	 * @return 	int
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function backers_count() {
+		return count( $this->backers() );
 	}
 
 	/**
@@ -461,7 +531,7 @@ class EDDCF_Campaign {
 			return edd_currency_filter( edd_format_amount( $this->current_amount ) );
 		}
 
-		return $this->current_amount;
+		return (float) $this->current_amount;
 	}
 
 	/**

@@ -89,6 +89,7 @@ class EDDCF_Admin_Campaign_Post_Type {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 2 );
 		add_filter( 'edd_metabox_fields_save', array( $this, 'meta_boxes_save' ) );
 		add_filter( 'edd_metabox_save_campaign_end_date', array( $this, 'save_end_date' ) );
+		add_filter( 'edd_metabox_save_campaign_goal', array( $this, 'save_campaign_goal' ) );
 		remove_filter( 'edd_metabox_save_edd_variable_prices', 'edd_sanitize_variable_prices_save' );
 		add_filter( 'edd_metabox_save_edd_variable_prices', array( $this, 'save_rewards' ) );
 		remove_action( 'edd_meta_box_fields', 'edd_render_product_type_field', 10 );		
@@ -277,6 +278,17 @@ class EDDCF_Admin_Campaign_Post_Type {
 		}
 
 		return $end_date;
+	}
+
+	/**
+	 * Sanitize the goal amount. Strips out thousands separators. 
+	 *
+	 * @return 	number
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function save_campaign_goal( $amount ) {
+		return edd_sanitize_amount( $amount );
 	}
 
 	/**

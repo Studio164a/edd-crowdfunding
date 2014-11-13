@@ -104,6 +104,9 @@ final class EDDCF_Public {
 
 		wp_register_style( 'edd-crowdfunding', $this->public_url . 'assets/css/edd-crowdfunding.css', array(), EDD_Crowdfunding::VERSION );
 		wp_enqueue_style( 'edd-crowdfunding' );
+
+		wp_register_script( 'single-campaign', $this->public_url . 'assets/js/single-campaign.js', array( 'jquery' ), EDD_Crowdfunding::VERSION );
+		wp_enqueue_script( 'single-campaign' );
 	}
 }
 

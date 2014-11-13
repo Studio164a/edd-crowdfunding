@@ -113,6 +113,8 @@ class EDD_Crowdfunding {
 		require_once( $this->includes_dir . 'class-eddcf-campaign-post-type.php' );
 		require_once( $this->includes_dir . 'class-eddcf-campaign-types.php' );
 		require_once( $this->includes_dir . 'class-eddcf-campaign.php' );
+		require_once( $this->includes_dir . 'class-eddcf-cart.php' );
+		require_once( $this->includes_dir . 'class-eddcf-checkout.php' );
 		require_once( $this->includes_dir . 'class-eddcf-gateways.php' );
 		require_once( $this->includes_dir . 'class-eddcf-templates.php' );
 		require_once( $this->includes_dir . 'class-eddcf-template.php' );
@@ -155,6 +157,8 @@ class EDD_Crowdfunding {
 		add_action( 'eddcf_start', array( 'EDDCF_Campaign_Post_Type', 'start' ), 1 );
 		add_action( 'eddcf_start', array( 'EDDCF_Gateways', 'start' ), 1 );
 		add_action( 'eddcf_start', array( 'EDDCF_Templates', 'start' ), 1 );
+		add_action( 'eddcf_start', array( 'EDDCF_Checkout', 'start' ), 1 );
+		add_action( 'eddcf_start', array( 'EDDCF_Cart', 'start' ), 1 );
 		
 		// Upgrade Routine
 		add_action( 'admin_init', array( $this, 'maybe_upgrade' ) );

@@ -16,9 +16,9 @@ $campaign = eddcf_get_campaign();
 	do_action( 'edd_before_price_options', $campaign->ID ); 
 
 	/**
-	 * @hook eddcf_campaign_pledge_options
+	 * @hook eddcf_campaign_pledge
 	 */
-	do_action( 'eddcf_campaign_pledge_options' );
+	do_action( 'eddcf_campaign_pledge', $campaign );
 
 	/**
 	 * @hook edd_after_price_options

@@ -55,8 +55,9 @@ class EDDCF_Templates {
 		// Set up pledge options form.
 		remove_action( 'edd_purchase_link_top', 'edd_purchase_variable_pricing', 10 );
 		add_action( 'edd_purchase_link_top', array( $this, 'pledge_options' ), 10 );
-		add_action( 'eddcf_campaign_pledge_options', array( $this, 'pledge_options_list' ), 10 );
-		add_action( 'edd_after_price_options', array( $this, 'custom_pledge' ), 5 );
+		add_action( 'eddcf_campaign_pledge', array( $this, 'pledge_options_list' ), 10 );
+		add_action( 'eddcf_campaign_pledge', array( $this, 'custom_pledge' ), 10 );
+		add_filter( 'edd_purchase_link_args', array( $this, 'purchase_link_text' ) );
 	}
 
 	/**
@@ -159,29 +160,6 @@ class EDDCF_Templates {
 	}
 
 	/**
-	 * Display campaign content. 
-	 *
-	 * @global 	WP_Post 	$post
-	 * @param 	string 		$content
-	 * @return 	void
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public function campaign_content( $content ) {
-		global $post;
-
-		if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() && !post_password_required() ) {
-			ob_start();
-				
-			eddcf_get_template( 'content-campaign.php' );
-
-			$content = ob_get_clean();
-		}
-		
-		return $content;
-	}
-
-	/**
 	 * Display details about campaign.  
 	 *
 	 * @return 	void
@@ -201,39 +179,55 @@ class EDDCF_Templates {
 	 * @since 	1.0.0
 	 */
 	public function pledge_options(  $download_id ) {
-		$variable_pricing = edd_has_variable_prices( $download_id );
-
-		if ( ! $variable_pricing ) {
-			return;
-		}
-
-		eddcf_get_template( 'campaign-pledge-options.php' );
+		eddcf_get_template( 'campaign-pledge.php' );
 	}
 
 	/**
 	 * Display the list of pledge options with checkboxes/radio elements.
 	 *
+	 * @param 	EDDCF_Campaign 	$campaign
 	 * @return 	void
 	 * @access 	public
 	 * @since 	1.0.0
 	 */
-	public function pledge_options_list() {
+	public function pledge_options_list( EDDCF_Campaign $campaign ) {
+		if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) {		
+			return;	
+		}
+
 		eddcf_get_template( 'campaign-pledge-options/pledge-options.php' );
 	}
 
 	/**
 	 * Display the custom pledge field. 
 	 * 
+	 * @param 	EDDCF_Campaign 	$campaign
 	 * @return 	void
 	 * @access 	public
 	 * @since 	1.0.0
 	 */
-	public function custom_pledge() {
-		global $edd_options;
-
-		//if ( isset( $edd_options[ 'atcf_settings_custom_pledge' ] ) ) {
+	public function custom_pledge( EDDCF_Campaign $campaign ) {
+		if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) {		
 			eddcf_get_template( 'campaign-pledge-options/custom-pledge.php' );
-		//}
+		}
+	}
+
+	/**
+	 * If this is a donations only campaign without rewards, change the button text.
+	 *
+	 * @param 	array 	$args
+	 * @return 	array
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function purchase_link_text( $args ) {
+		$campaign = eddcf_get_campaign( $args['download_id'] );
+
+		if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) {
+			$args['text'] = apply_filters( 'eddcf_donate_button_text', __( 'Donate', 'eddcf' ) );
+		}
+
+		return $args;
 	}
 }
 
