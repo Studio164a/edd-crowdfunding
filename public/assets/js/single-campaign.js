@@ -1,54 +1,58 @@
 ;( function( $ ){
 
 	var $pledge_options, 
-		$custom_pledge;
+		$custom_pledge, 
+		$donation_input,
+		$pledge_total;
 
 	// Set the currently selected pledge.
 	var select_pledge = function( $pledge ) {
 		var input = $pledge.find( 'input' )[0];
 
-		console.log( $pledge )
-		console.log( input );
-
 		// This pledge was already checked, so unset it.
 		if ( input.checked ) {
 			input.checked = false;
-			update_custom_pledge( $pledge, 'decrease' );
 		} 
 		else {
-			input.checked = true;
-			update_custom_pledge( $pledge, 'increase' );
+			input.checked = true;			
 		}
 
 		$pledge.toggleClass('selected');
+
+		update_total_pledge();		
 	};
 
-	// Update the custom pledge field after a pledge is selected.
-	var update_custom_pledge = function( $pledge, direction ) {
-		if ( 'undefined' === typeof $custom_pledge ) {
+	// When a custom pledge amount is entered, manually select the custom pledge input.
+	var select_custom_pledge = function() {
+		if ( isNaN( $custom_pledge.val() ) ) {
+			$donation_input[0].checked = false;
+		}
+		else {
+			$donation_input[0].checked = true;	
+		}
+
+		update_total_pledge();		
+	};
+
+	// Calculates the total amount pledged.
+	var update_total_pledge = function() {
+		if ( 'undefined' === typeof $pledge_total ) {
 			return;
 		}
 
-		var amount = parseFloat( $custom_pledge.val() ), 
-			pledge_amount = parseFloat( $pledge.data('price') );
+		var total = parseFloat( $custom_pledge.val() );
 
-		if ( isNaN( amount ) ) {
-			amount = 0;
+		if ( isNaN( total ) ) {
+			total = 0;
 		}
 
-		if ( 'decrease' === direction ) {
-			$custom_pledge.val( amount - pledge_amount );
-		}
-		else {
-			$custom_pledge.val( amount + pledge_amount );
-		}
-	};
+		$pledge_options.each( function() {			
+			if ( $(this).hasClass( 'selected' ) ) {
+				total += parseFloat( $(this).data('price') );
+			}		
+		} );
 
-	// Find the nearest pledge amount for the given custom pledge.
-	var find_nearest_pledge = function() {
-		var amount = $custom_pledge.val( $pledge.data('price') );
-
-		console.log( amount );
+		$pledge_total.text( parseFloat( total ) );		
 	};
 
 	// Hide pledge option input
@@ -59,19 +63,21 @@
 
 	$(document).ready( function() {
 		$pledge_options = $('.pledge-option');
-		$custom_pledge = $('#eddcf_custom_price');
+		$custom_pledge = $('#eddcf_donation');
+		$pledge_total = $('.total-pledge-amount');
+		$donation_input = $('.eddcf_donation_input');
 
 		hide_pledge_input();
 
-		$pledge_options.on( 'click', function() {
-			select_pledge( $(this) );
-		} );
+		if ( $pledge_total.length ) {			
+			$pledge_options.on( 'click', function() {
+				select_pledge( $(this) );
+			} );
 
-		$custom_pledge.on( 'change', function() {
-			select_pledge( find_nearest_pledge() );
-		} );
-
-
+			$custom_pledge.on( 'change', function() {
+				select_custom_pledge();
+			} );
+		}
 	} );
 
 } )( jQuery );

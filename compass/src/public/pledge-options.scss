@@ -1,11 +1,11 @@
 .pledge-section-header {
-	padding: 1em 0;
+	padding: 32px 0;
 	margin: 0;
 	text-align: center;
 }
 
 .campaign-pledge-options {
-	margin-top: 2em;
+	margin-top: 32px;
 	
 	.pledge-options {
 		list-style: none;
@@ -14,7 +14,7 @@
 
 	.pledge-option {
 		position: relative;
-		padding: 2em;
+		padding: 32px;
 		border-top: 1px solid #cfcfcf;		
 		background-color: #f6f6f6;
 		-webkit-transition: .2s background-color;
@@ -28,7 +28,7 @@
 		}
 
 		&:last-child {
-			border-bottom: 0;
+			border-bottom: 1px solid #cfcfcf;
 		}
 	}
 
@@ -48,16 +48,16 @@
 
 	.pledge-option-input {
 		position: absolute;
-		left: 0.5em;
-		top: 2em;
+		left: 8px;
+		top: 32px;
 	}
 
 	.pledge-title {
-		margin: 0 0 0.5em;
+		margin: 0 0 8px;
 	}
 
 	.pledge-limit {
-		margin-bottom: 1em;
+		margin-bottom: 16px;
 		font-weight: bolder;
 		font-style: italic;
 	}
@@ -69,31 +69,35 @@
 
 .campaign-price-input {
 	position: relative;
-    padding: 0 2em;
+    padding: 0 32px;
 }
 
 .currency {    
 	position: absolute;
-	left: 3em;
+	left: 48px;
     display: block;
-    padding: 1em 0;
+    padding: 16px 0;
     font-weight: lighter;    
 }
 
 .currency-right {
 	.currency {
-		right: 3em;
+		right: 48px;
 	}
 }
 
 #eddcf_donation {
 	width: 100%;
-	padding: 1em 3em;
+	padding: 16px 48px;
 }
 
 .campaign-total-pledge {
-	padding: 2em 0;
+	padding: 32px 0 0;
 	text-align: center;
+
+	p {
+		margin-bottom: 0;
+	}
 
 	.total-pledge-amount {
 		font-size: 2em;
@@ -103,12 +107,12 @@
 
 .edd_purchase_submit_wrapper {    
     width: 100%;
-    padding: 2em 0;
+    padding: 32px 0;
     text-align: center;
 }
 
 .edd-cart-added-alert {
 	width: 100%;
-	padding-top: 0.5em;
+	padding-top: 8px;
 	text-align: center;
 }

@@ -10,31 +10,32 @@
 .campaign-details .pledge-button .button { display: inline-block; }
 
 /* Campaign pledge options ***/
-.pledge-section-header { padding: 1em 0; margin: 0; text-align: center; }
+.pledge-section-header { padding: 32px 0; margin: 0; text-align: center; }
 
-.campaign-pledge-options { margin-top: 2em; }
+.campaign-pledge-options { margin-top: 32px; }
 .campaign-pledge-options .pledge-options { list-style: none; margin: 0; }
-.campaign-pledge-options .pledge-option { position: relative; padding: 2em; border-top: 1px solid #cfcfcf; background-color: #f6f6f6; -webkit-transition: .2s background-color; -moz-transition: .2s background-color; -ms-transition: .2s background-color; -o-transition: .2s background-color; transition: .2s background-color; }
+.campaign-pledge-options .pledge-option { position: relative; padding: 32px; border-top: 1px solid #cfcfcf; background-color: #f6f6f6; -webkit-transition: .2s background-color; -moz-transition: .2s background-color; -ms-transition: .2s background-color; -o-transition: .2s background-color; transition: .2s background-color; }
 .campaign-pledge-options .pledge-option:hover { background-color: #fff; }
-.campaign-pledge-options .pledge-option:last-child { border-bottom: 0; }
+.campaign-pledge-options .pledge-option:last-child { border-bottom: 1px solid #cfcfcf; }
 .campaign-pledge-options .pledge-option.selected { background-color: #fff; }
 .campaign-pledge-options .pledge-option.selected:after { content: "\2713"; color: #fff; background-color: #24890d; padding: 0.5em; position: absolute; top: 2em; right: 0; }
-.campaign-pledge-options .pledge-option-input { position: absolute; left: 0.5em; top: 2em; }
-.campaign-pledge-options .pledge-title { margin: 0 0 0.5em; }
-.campaign-pledge-options .pledge-limit { margin-bottom: 1em; font-weight: bolder; font-style: italic; }
+.campaign-pledge-options .pledge-option-input { position: absolute; left: 8px; top: 32px; }
+.campaign-pledge-options .pledge-title { margin: 0 0 8px; }
+.campaign-pledge-options .pledge-limit { margin-bottom: 16px; font-weight: bolder; font-style: italic; }
 .campaign-pledge-options .pledge-description { margin-bottom: 0; }
 
-.campaign-price-input { position: relative; padding: 0 2em; }
+.campaign-price-input { position: relative; padding: 0 32px; }
 
-.currency { position: absolute; left: 3em; display: block; padding: 1em 0; font-weight: lighter; }
+.currency { position: absolute; left: 48px; display: block; padding: 16px 0; font-weight: lighter; }
 
-.currency-right .currency { right: 3em; }
+.currency-right .currency { right: 48px; }
 
-#eddcf_donation { width: 100%; padding: 1em 3em; }
+#eddcf_donation { width: 100%; padding: 16px 48px; }
 
-.campaign-total-pledge { padding: 2em 0; text-align: center; }
+.campaign-total-pledge { padding: 32px 0 0; text-align: center; }
+.campaign-total-pledge p { margin-bottom: 0; }
 .campaign-total-pledge .total-pledge-amount { font-size: 2em; font-weight: bolder; }
 
-.edd_purchase_submit_wrapper { width: 100%; padding: 2em 0; text-align: center; }
+.edd_purchase_submit_wrapper { width: 100%; padding: 32px 0; text-align: center; }
 
-.edd-cart-added-alert { width: 100%; padding-top: 0.5em; text-align: center; }
+.edd-cart-added-alert { width: 100%; padding-top: 8px; text-align: center; }

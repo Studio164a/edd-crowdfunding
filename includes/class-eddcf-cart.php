@@ -86,11 +86,20 @@ class EDDCF_Cart {
 			$donation_amount = $_POST['eddcf_donation'];
 		}
 
+		// No donation passed, so return now.
 		if ( ! $donation_amount ) {
 			return $cart_item;
 		}
 
-		$cart_item['options']['eddcf_donation'] = edd_sanitize_amount( $donation_amount );
+		// Only add the donation amount to the donation variation.
+		$variations 		= edd_get_variable_prices( $cart_item['id'] );
+		$current_variation 	= $variations[ $cart_item['options']['price_id'] ];
+
+		if ( isset( $current_variation['is_donation'] ) && $current_variation['is_donation'] ) {
+
+			$cart_item['options']['eddcf_donation'] = edd_sanitize_amount( $donation_amount );
+
+		}		
 
 		return $cart_item;
 	}

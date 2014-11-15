@@ -300,43 +300,43 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since 	1.0.0
 	 */
 	public function save_rewards( $prices ) {
-		$norewards = isset ( $_POST[ 'campaign_norewards' ] ) ? true : false;
+		// $norewards = isset ( $_POST['campaign_norewards'] ) ? true : false;
 
-		if ( $norewards ) {
-			// $prices = array();
-			// $prices[0] = array(
-			// );
+		// if ( ! $norewards ) {
+		// 	return $prices;
+		// }
 
-			// return $prices;
+		// if ( isset( $prices[0]['name'] ) ) {
+		// 	return $prices;
+		// }
+
+		// $prices = array();
+
+		// echo '<pre>'; print_r( $prices );
+
+		// die;
+
+		// Don't add it again.
+		if ( isset( $prices[0]['is_donation'] ) ) {
+			return $prices;
 		}
 
-		return $prices;
-	}
-
-	/**
-	 * Updates Save
-	 *
-	 * EDD trys to escape this data, and we don't want that.
-	 *
-	 * @since Astoundify Crowdfunding 0.9
-	 */
-	function atcf_save_variable_prices_norewards( $prices ) {
-		$norewards = isset ( $_POST[ 'campaign_norewards' ] ) ? true : false;
-
-		if ( ! $norewards )
-			return $prices;
-
-		if ( isset( $prices[0][ 'name' ] ) )
-			return $prices;
-
-		$prices = array();
-
-		$prices[0] = array(
-			'name'   => apply_filters( 'atcf_default_no_rewards_name', __( 'Donation', 'atcf' ) ),
-			'amount' => apply_filters( 'atcf_default_no_rewards_price', 0 ),
+		$donation_option = array(
+			'name'   => apply_filters( 'eddcf_default_no_rewards_name', __( 'Donation', 'eddcf' ) ),
+			'amount' => apply_filters( 'eddcf_default_no_rewards_price', 0 ),
 			'limit'  => null,
-			'bought' => 0
+			'bought' => 0, 
+			'is_donation' => true
 		);
+
+		array_unshift( $prices, $donation_option );
+
+		// $prices[0] = array(
+		// 	'name'   => apply_filters( 'eddcf_default_no_rewards_name', __( 'Donation', 'eddcf' ) ),
+		// 	'amount' => apply_filters( 'eddcf_default_no_rewards_price', 0 ),
+		// 	'limit'  => null,
+		// 	'bought' => 0
+		// );
 
 		return $prices;
 	}
@@ -405,6 +405,7 @@ class EDDCF_Admin_Campaign_Post_Type {
 		</td>
 		<td>
 			<input type="text" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][bought]" id="edd_variable_prices[<?php echo $key; ?>][bought]" value="<?php echo isset ( $args[ 'bought' ] ) ? $args[ 'bought' ] : null; ?>" style="width:100%" placeholder="0" />
+			<input type="hidden" class="edd_repeatable_name_field" name="edd_variable_prices[<?php echo $key; ?>][is_donation]" value="<?php echo isset( $args[ 'is_donation' ] ) ? $args[ 'is_donation' ] : 0 ?>" />
 		</td>
 		<?php
 	}
@@ -427,6 +428,8 @@ class EDDCF_Admin_Campaign_Post_Type {
 			$args['bought'] = $value['bought'];
 		}
 
+		$args['is_donation'] = isset( $value['is_donation'] ) ? $value['is_donation'] : 0;	
+		
 		return $args;
 	}
 }

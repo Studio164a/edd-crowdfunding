@@ -55,9 +55,12 @@ class EDDCF_Templates {
 		// Set up pledge options form.
 		remove_action( 'edd_purchase_link_top', 'edd_purchase_variable_pricing', 10 );
 		add_action( 'edd_purchase_link_top', array( $this, 'pledge_options' ), 10 );
-		add_action( 'eddcf_campaign_pledge', array( $this, 'pledge_options_list' ), 10 );
+		add_action( 'eddcf_campaign_pledge', array( $this, 'pledge_options_list' ), 5 );
 		add_action( 'eddcf_campaign_pledge', array( $this, 'custom_pledge' ), 10 );
+		add_action( 'edd_after_price_options', array( $this, 'total_contribution' ) );
 		add_filter( 'edd_purchase_link_args', array( $this, 'purchase_link_text' ) );
+
+		do_action( 'eddcf_templates', $this, $this->eddcf );
 	}
 
 	/**
@@ -191,9 +194,9 @@ class EDDCF_Templates {
 	 * @since 	1.0.0
 	 */
 	public function pledge_options_list( EDDCF_Campaign $campaign ) {
-		if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) {		
-			return;	
-		}
+		// if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) {
+		// 	return;	
+		// }
 
 		eddcf_get_template( 'campaign-pledge-options/pledge-options.php' );
 	}
@@ -207,9 +210,25 @@ class EDDCF_Templates {
 	 * @since 	1.0.0
 	 */
 	public function custom_pledge( EDDCF_Campaign $campaign ) {
-		if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) {		
+		// if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) {		
 			eddcf_get_template( 'campaign-pledge-options/custom-pledge.php' );
+		// }
+	}
+
+	/**
+	 * Total amount to be contributed to the campaign.
+	 *
+	 * @return 	void
+	 * @access  public
+	 * @since 	1.0.0
+	 */
+	public function total_contribution( $campaign_id ) {
+		$campaign = eddcf_get_campaign( $campaign_id );
+		if ( $campaign->is_donations_only() || ! $campaign->has_reward_options() ) {
+			return;	
 		}
+
+		eddcf_get_template( 'campaign-pledge-options/pledge-total.php' );
 	}
 
 	/**
