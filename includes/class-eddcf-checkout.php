@@ -2,7 +2,7 @@
 /**
  * The class that handles actions taken during the checkout process.
  *
- * @version		1.0
+ * @version		1.0.0
  * @package		EDD Crowdfunding/Classes/EDDCF_Checkout
  * @copyright 	Copyright (c) 2014, Eric Daams	
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -75,7 +75,8 @@ class EDDCF_Checkout {
 	 * @access  public
 	 * @since 	1.0.0
 	 */
-	public function maybe_update_backer_count( $payment_id, $new_status, $old_status ) {			
+	public function maybe_update_backer_count( $payment_id, $new_status, $old_status ) {	
+
 		// Make sure that payments are only completed once
 		if ( 'pending' != $old_status ) {
 			return;
