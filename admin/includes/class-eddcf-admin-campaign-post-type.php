@@ -49,7 +49,7 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 * @since	1.0.0
 	 */
 	private function __construct( EDD_Crowdfunding $eddcf ) {
-		$this->edd_crowdfunding = $eddcf;
+		$this->eddcf = $eddcf;
 
 		$this->metabox_helper = new EDDCF_Metabox_Helper( 'eddcf-campaign' );
 
@@ -98,6 +98,8 @@ class EDDCF_Admin_Campaign_Post_Type {
 		add_filter( 'edd_price_options_heading', array( $this, 'price_options_heading' ) );
 		add_filter( 'edd_variable_pricing_toggle_text', array( $this, 'variable_pricing_toggle_text' ) );
 		add_action( 'edd_after_price_field', array( $this, 'norewards_field' ) );
+		remove_action( 'edd_render_price_row', 'edd_render_price_row', 10, 4 );				
+		add_action( 'edd_render_price_row', array( $this, 'reward_row' ), 10, 4 );
 		add_action( 'edd_download_price_table_head', array( $this, 'reward_limit_head' ), 9 );
 		add_action( 'edd_download_price_table_row', array( $this, 'reward_limit_column' ), 9, 3 );
 		add_filter( 'edd_price_row_args', array( $this, 'reward_row_args' ), 10, 2 );
@@ -372,6 +374,38 @@ class EDDCF_Admin_Campaign_Post_Type {
 	 */
 	public function norewards_field() {
 		eddcf_admin_view('metaboxes/campaign-rewards/norewards');
+	}
+
+	/**
+	 * Render a reward row. If it's the donation "reward", the inputs are all hidden.
+	 *
+	 * @uses 	edd_render_price_row
+	 * @param 	string 	$key
+	 * @param 	array 	$args
+	 * @param 	int 	$post_id
+	 * @return 	void
+	 * @access 	public
+	 * @since 	1.0.0
+	 */
+	public function reward_row( $key, $args = array(), $post_id, $index ) {
+		if ( isset( $args['is_donation'] ) && $args['is_donation'] ) {
+			$row_name 	= isset( $args['name'] ) 	? $args['name'] 	: apply_filters( 'eddcf_default_no_rewards_name', __( 'Donation', 'eddcf' ) );
+			$row_amount = isset( $args['amount'] ) 	? $args['amount'] 	: apply_filters( 'eddcf_default_no_rewards_price', 0 );
+			$row_limit 	= isset( $args['limit'] ) 	? $args['limit'] 	: null;
+			$row_bought = isset( $args['bought'] ) 	? $args['bought'] 	: 0;
+			?>
+			<td style="display: none;">
+				<input type="hidden" name="edd_variable_prices[<?php echo $key ?>][name]" value="<?php echo $row_name ?>" />
+				<input type="hidden" name="edd_variable_prices[<?php echo $key ?>][amount]" value="<?php echo $row_amount ?>" />
+				<input type="hidden" name="edd_variable_prices[<?php echo $key ?>][limit]" value="<?php echo $row_limit ?>" />
+				<input type="hidden" name="edd_variable_prices[<?php echo $key ?>][bought]" value="<?php echo $row_bought ?>" />
+				<input type="hidden" name="edd_variable_prices[<?php echo $key ?>][is_donation]" value="1" />
+			</td>
+			<?php
+		}
+		else {
+			edd_render_price_row( $key, $args, $post_id, $index );
+		}
 	}
 
 	/**

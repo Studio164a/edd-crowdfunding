@@ -90,6 +90,7 @@ final class EDDCF_Admin {
 		require_once( $this->admin_includes . 'functions-eddcf-admin.php' );
 		require_once( $this->admin_includes . 'class-eddcf-metabox-helper.php' );
 		require_once( $this->admin_includes . 'class-eddcf-admin-campaign-post-type.php' );
+		require_once( $this->admin_includes . 'class-eddcf-settings.php' );
 	}
 
 	/**
@@ -101,6 +102,7 @@ final class EDDCF_Admin {
 	 */
 	private function attach_hooks_and_filters() {
 		add_action( 'eddcf_start', array( 'EDDCF_Admin_Campaign_Post_Type', 'start' ), 5 );
+		add_action( 'eddcf_start', array( 'EDDCF_Settings', 'start' ), 5 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );		
 	}
 

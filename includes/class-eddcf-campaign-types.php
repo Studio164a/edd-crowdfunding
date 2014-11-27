@@ -73,8 +73,8 @@ class EDDCF_Campaign_Types {
 				'title'       	=> __( 'Flexible', 'eddcf' ),
 				'description' 	=> __( 'Collect funds pledged at the end of the campaign no matter what.', 'eddcf' )
 			), 
-			'donation'	=> array(
-				'title'			=> __( 'Donations', 'eddcf' ), 
+			'instant'	=> array(
+				'title'			=> __( 'Instant', 'eddcf' ), 
 				'description'	=> __( 'Funds are collected automatically when the pledge is made.', 'eddcf' )
 			)
 		) );
@@ -96,7 +96,7 @@ class EDDCF_Campaign_Types {
 			$active_types['flexible'] = $types['flexible'];
 		}
 		else {
-			$active_types['donation'] = $types['donation'];
+			$active_types['instant'] = $types['instant'];
 		}
 
 		return apply_filters( 'eddcf_active_campaign_types', $active_types );
@@ -110,7 +110,7 @@ class EDDCF_Campaign_Types {
 	 * @since 	1.0.0
 	 */
 	public function default_type() {
-		$type = apply_filters( 'eddcf_campaign_type_default', eddcf_gateways()->has_preapproval_gateway() ? 'fixed' : 'donation' );
+		$type = apply_filters( 'eddcf_campaign_type_default', eddcf_gateways()->has_preapproval_gateway() ? 'fixed' : 'instant' );
 		return $type;
 	}
 }

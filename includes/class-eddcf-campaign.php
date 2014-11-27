@@ -425,7 +425,7 @@ class EDDCF_Campaign {
 
 		// Endless campaign.
 		if ( $this->is_endless() ) {
-			$time_left = apply_filters( 'eddcf_endless_campaign_time_left', _( 'Campaign has no end', 'eddcf' ) );
+			$time_left = apply_filters( 'eddcf_endless_campaign_time_left', __( 'Campaign has no end', 'eddcf' ) );
 		}
 
 		// Campaign is no longer active.
